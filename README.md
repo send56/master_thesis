@@ -1,11 +1,19 @@
-This repository includes my master-thesis by Latex based on an existing Latex template: https://github.com/cyrraz/phd-thesis developed by Cyrille Praz ([@cyrraz](https://github.com/cyrraz)).
-======================================================================================
-Copyright：@2025 Zhang Li
+Master thesis by Li Zhang 
+====================================================================================== 
 **Do not redistribute, copy, or reuse any part of this content without permission.**
-======================================================================================
-Add **latex-workshop.latex.recipe.default": "latexmk (xelatex)** in the settings.json file at .vscode directory for compiling some japanese characters in this thesis.
 
-Sometimes files or directories are zipped due to disk limitation. Unzip them before compiling.
+# Source:
+This repository includes my master-thesis by Latex based on an existing Latex template: https://github.com/cyrraz/phd-thesis developed by Cyrille Praz ([@cyrraz](https://github.com/cyrraz)).
+
+# Note:
+- Add **latex-workshop.latex.recipe.default": "latexmk (xelatex)** in the settings.json file at .vscode directory for compiling some japanese characters in this thesis.
+    ```
+    {
+    "latex-workshop.latex.recipe.default": "latexmk (xelatex)"
+    }
+    ```
+
+- Sometimes files or directories are zipped due to disk limitation. Unzip them before compiling.
 
 The main files and folders are:
 * `master_thesis.tex`: main tex file whose purpose is to import all the other tex files;
@@ -21,3 +29,4 @@ The main files and folders are:
 * `include/jhep.bst`: BibTeX style file;
 * `include/belle2sym.tex`: file defining particle symbols.
 
+# Comments:
