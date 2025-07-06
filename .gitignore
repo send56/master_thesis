@@ -1,10 +1,13 @@
-master_thesis.aux
-master_thesis.log
-master_thesis.synctex.gz
-master_thesis.bbl
-master_thesis.blg
-master_thesis.toc
-master_thesis.brf
+*.pdf
+*.aux
+*.log
+*.synctex.gz
+*.bbl
+*.blg
+*.toc
+*.brf
+*.fdb_latexmk
+*.fls
+*.xdv
 include/bibliography.bib.bak
 
-master_thesis.pdf

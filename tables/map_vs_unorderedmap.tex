@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison between \texttt{std::map} and \texttt{std::unordered\_map} in C++}
+  \label{tab:map_vs_unorderedmap}
+  \begin{tabular}{|l|l|p{5.5cm}|}
+    \hline
+    \textbf{Feature} & \texttt{std::map} & \texttt{std::unordered\_map} \\
+    \hline
+    Data Structure & Self-balancing BST & Hash Table \\
+    \hline
+    Order & Sorted order & No specific order \\
+    \hline
+    Time Complexity & $\mathcal{O}(\log n)$ & $\mathcal{O}(1)$ on average \\
+    \hline
+    Memory Usage & Higher (due to tree nodes) & Lower (uses hashing) \\
+    \hline
+    Use Case & When sorted order is required & When order is unimportant but speed is crucial \\
+    \hline
+  \end{tabular}
+\end{table}

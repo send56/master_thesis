@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+  \centering
+  \caption{Mapping Rule between the input vector dimensions and OnlineID}
+  \label{tab:OnlineID_vs_vector}
+  \begin{tabular}{|p{3cm}|p{4cm}|p{6cm}|}
+    \hline
+    \textbf{Input Vector \newline Dimensions} & \textbf{OnlineID} & \textbf{Mapping Rule} \\
+    \hline
+    side & subsystemNumber & 0 for Aside ($+1$), 1 for Cside ($-1$) \\
+    \hline
+    sl & octantNumber,\newline moduleNumber & $sl = 3 \times$ octantNumber \newline $+ \lfloor$moduleNumber $/ 3\rfloor$ \\
+    \hline
+    subsec & moduleNumber & subsec = moduleNumber mod 3 \\
+    \hline
+    layer & layerNumber, isStrip & If Wire: layer = layerNumber \newline If Strip: layer = layerNumber + 6 \\
+    \hline
+    channel & channelNumber & same \\
+    \hline
+  \end{tabular}
+\end{table}

@@ -1,19 +1,14 @@
-phd-thesis
-==========
+This repository includes my master-thesis by Latex based on an existing Latex template: https://github.com/cyrraz/phd-thesis developed by Cyrille Praz ([@cyrraz](https://github.com/cyrraz)).
+======================================================================================
+Copyright：@2025 Zhang Li
+**Do not redistribute, copy, or reuse any part of this content without permission.**
+======================================================================================
+Add **latex-workshop.latex.recipe.default": "latexmk (xelatex)** in the settings.json file at .vscode directory for compiling some japanese characters in this thesis.
 
-[![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
-
-Repository for my PhD thesis, whose reference is:
-
-* C. Praz, [*Search for B→Kνν decays with a machine learning method at the Belle II experiment*](https://dx.doi.org/10.3204/PUBDB-2022-04919), Ph.D. thesis, DESY, Hamburg, 2022.
-
-The pdf of the thesis can be produced by unzipping `figs.zip` and `tables.zip`, and running `make`.
-For producing the pdf, you need a distribution for the TeX typesetting system, such as [TeX Live](https://www.tug.org/texlive/quickinstall.html).
-An alternative is to use an online LaTeX editor, such as [Overleaf](https://www.overleaf.com/).
-A template version of the thesis is available in [this repository](https://github.com/cyrraz/thesis-template).
+Sometimes files or directories are zipped due to disk limitation. Unzip them before compiling.
 
 The main files and folders are:
-* `phd_thesis.tex`: main tex file whose purpose is to import all the other tex files;
+* `master_thesis.tex`: main tex file whose purpose is to import all the other tex files;
 * `Makefile`: makefile to produce the pdf of the thesis;
 * `figs.zip`: folder containing the figures;
 * `tables.zip`: folder containing the tables;
@@ -26,17 +21,3 @@ The main files and folders are:
 * `include/jhep.bst`: BibTeX style file;
 * `include/belle2sym.tex`: file defining particle symbols.
 
-This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License][cc-by-nc].
-
-See also
---------
-* [thesis-template](https://github.com/cyrraz/thesis-template): LaTeX template for a PhD, Master's or Bachelor's thesis.
-* [particle-physics-presentations](https://github.com/cyrraz/particle-physics-presentations): Public presentations in Beamer LaTeX given during my PhD and postdoctoral studies in Particle Physics.
-* [moriond-2023-proceedings-ewp-radiative](https://github.com/cyrraz/moriond-2023-proceedings-ewp-radiative): Proceedings for my talk at the Moriond conference.
-* [letter-template](https://github.com/cyrraz/letter-template):  Very simple template for a letter in LaTeX.
-
-[cc-by-nc-shield]: https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg
-[cc-by-nc]: https://creativecommons.org/licenses/by-nc/4.0/
-
-[//]: # ([![CC BY-NC 4.0][cc-by-nc-image]][cc-by-nc])
-[//]: # ([cc-by-nc-image]: https://i.creativecommons.org/l/by-nc/4.0/88x31.png)

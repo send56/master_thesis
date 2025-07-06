@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+  \centering
+  \caption{List of variables in OnlineID}
+  \label{tab:OnlineID}
+  \begin{tabular}{|l|l|p{3cm}|p{6cm}|}
+    \hline
+    \textbf{Variable Name} & \textbf{Type} & \textbf{Value Range} & \textbf{Meaning} \\
+    \hline
+    subsystemNumber & int & A/C : +1/-1 & Indicates Aside or Cside \\
+    \hline
+    octantNumber & int & 0--7 & Index when dividing the wheel into 8 segments(3 sectors for each segments) in the increasing $\phi$ direction\\
+    \hline
+    moduleNumber & int & 0--12 & Identifier of each segment in increasing $\phi$ direction when dividing Endcap/Forward wheels into 8 parts (refer to Appendix)\\
+    \hline
+    layerNumber & int & 0--6: M1--M3;\newline 7,8: EI/FI & Index assigned to each layer in the increasing $z$ direction \\
+    \hline
+    rNumber & int & M1: 1--4;\newline M2,M3: 0--4;\newline Forward: 0 & Index assigned to each chamber in the increasing $\eta$ direction \\
+    \hline
+    wireOrStrip & bool & T/F: Strip/Wire & Distinction between Strip and Wire \\
+    \hline
+    channelNumber & int & 0--n & Logical channel number assigned to each channel \newline Wire: increases with $\eta$ \newline Strip: increases with $\phi$ \newline (AsideForward, CsideBackward) \newline decreases with $\phi$ \newline (AsideBackward, CsideForward) \\
+    \hline
+  \end{tabular}
+\end{table}
