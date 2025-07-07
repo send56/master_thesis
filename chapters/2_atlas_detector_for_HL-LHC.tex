@@ -80,7 +80,7 @@ The trigger system covers the pseudorapidity range $|\eta| < 2.4$. In the barrel
 \end{figure}
 
 %====================================================================================================
-\subsubsection{Monitored Drift Tube (MDT)}
+\subsection{Monitored Drift Tube (MDT)}
 %====================================================================================================
 The Monitored Drift Tubes (MDTs) are precision tracking detectors covering the region of $|\eta| < 2.7$. They consist of layered arrays of pressurized drift tubes as base elements, each with a diameter of 29.970~mm and a central anode wire of 50~$\mu$m in diameter. A cross-section view and a longitudinal cut view of a drift tube of the MDT chamber are shown in Figures~\ref{fig:MDT_tube}. The tubes are filled with a gas mixture of argon and carbon dioxide (Ar/CO$_2$ = 93/7) at 3~bar, and a high voltage of 3080~V is applied between the cathode tube and the central wire \cite{ATLASDetector2008}. As charged particles traverse the gas, they cause ionisation, and make electrons drift toward the anode wire. By measuring this drift time, the radial position of the particle's trajectory can be reconstructed with a spatial resolution of up to 35~$\mu$m. The maximum drift time within a tube is about 700~ns.
 
@@ -104,7 +104,7 @@ The Monitored Drift Tubes (MDTs) are precision tracking detectors covering the r
 \end{figure}
 
 %====================================================================================================
-\subsubsection{Cathode Strip Chambers (CSC)}
+\subsection{Cathode Strip Chambers (CSC)}
 %====================================================================================================
 Cathode Strip Chambers (CSCs) are installed in the innermost layer of the muon endcap region for $|\eta| > 2.0$, where the hit rate exceeds the operating limit of MDTs. CSCs are capable of handling counting rates up to 1000~Hz/cm$^2$, offering high-rate tolerance, excellent spatial resolution, and strong double-track separation performance. Each CSC is a multiwire proportional chamber, with wires oriented in the radial direction and both cathodes segmented. The cathode strips perpendicular to the wires provide the precision $\eta$ coordinate, while the strips parallel to the wires measure the $\phi$ coordinate. The particle position is determined by interpolating the charge distribution induced on neighboring cathode strips. The CSC system has two disks on both sides, with eight chambers each (eight small and eight large) as illustrated in Figure~\ref{fig:CSC_layout}.
 
@@ -116,7 +116,7 @@ Cathode Strip Chambers (CSCs) are installed in the innermost layer of the muon e
 \end{figure}
 
 %====================================================================================================
-\subsubsection{Resistive Plate Chamber (RPC)}
+\subsection{Resistive Plate Chamber (RPC)}
 %====================================================================================================
 The Resistive Plate Chambers (RPCs) serve as the barrel trigger detectors in the muon spectrometer system. The RPC is a gaseous detector with two parallel resistive plates and a 2~mm gas gap. It operates in avalanche mode with fast timing ($\sim$5~ns), using a C$_2$H$_2$F$_4$-based gas mixture. High voltage induces avalanches, and signals are read out via capacitive coupling to external strips. A schematic of RPC chamber is shown in Figure~\ref{fig:RPC_cross_section}
 
@@ -137,7 +137,7 @@ They are arranged in three concentric cylindrical layers around the beam axis, r
 \end{figure}
 
 %====================================================================================================
-\subsubsection{Thin Gap Chamber (TGC)} \label{sec:TGC}
+\subsection{Thin Gap Chamber (TGC)} \label{sec:TGC}
 %====================================================================================================
 The Thin Gap Chambers (TGCs) are used in the endcap region of the ATLAS muon spectrometer as trigger detectors, covering the pseudorapidity range $1.05 < |\eta| < 2.4$. They are positioned on both sides of the toroidal magnetic field, with the inner detectors located in the Endcap Inner (EI) region and the outer detectors forming the Big Wheel (\BW). The picture of TGC BW are given as Figure\ref{fig:TGC_pic}. The BW TGCs consist of three stations, designated as M1, M2, and M3 from the inner to outer layers.
 
@@ -167,15 +167,50 @@ For higher space resolution during reconstruction, stations are composed of mult
 \end{figure}
 
 %====================================================================================================
-\section{TDAQ System} \label{sec:TDAQSystem}
+\paragraph{New Small Wheel (NSW)} \label{sec:NSW}
 %====================================================================================================
 
+%====================================================================================================
+\section{TDAQ System} \label{sec:TDAQSystem}
+%====================================================================================================
+In the ATLAS experiment, the selection and recording of events is handled by the Trigger and Data Acquisition (TDAQ) system, consisting of the Trigger System and the Data Acquisition System. They are introduced as below.
+%====================================================================================================
+\subsection{Trigger System}
+%====================================================================================================
+The proton-proton collisions occurring at a frequency of 40~MHz at the LHC, resulting in an extremely high event rate. Therefore, it is unpractical to record all the events from proton-proton collisions. In addition to the massive data volume, the vast majority of collision events are dominated by low-energy background processes that do not arouse interests. To address this, ATLAS employs a trigger system to select only events of potential interest for further physics analyses.
 
-\clearpage
+The trigger system, which acts a crucial role in the TDAQ system, is divided into two sequential stages. At LHC Run~3, the ATLAS trigger system consists of two levels: a hardware-based Level-1 Trigger (L1 Trigger) that performs a fast initial selection, and a software-based High-Level Trigger (HLT) that provides a further event selection with higher precision as the second step. A schematic of ATLAS trigger system in Run~3 is shown in Figure~\ref{fig:trigger_run3}.
+
+The L1 trigger primarily receives inputs from two independent systems: \textit{L1Muon} and \textit{L1Calo}, which use custom electronics to trigger on reduced-granularity information from the muon detectors and calorimeters, respectively. A third component, the \textit{L1Topo} processor, applies real-time topological selection criteria based on kinematic informations in the L1Muon and L1Calo systems. The trigger decision at L1 is made by the Central Trigger Processor (CTP), which receives input from L1Muon via the Muon-to-Central Trigger Processor Interface (MUCTPI), from L1Calo, L1Topo, and other auxiliary subsystems. Up to 512 different L1 trigger items can be configured in the CTP. The L1 system reduces the event rate from 40~MHz to a maximum of 100~kHz within a latency constraint of less than 2.5~$\mu$s. 
+
+Once the events are accepted at L1 trigger, they are then sent to a software-based HLT. At this stage, \textit{online} reconstruction algorithms analyze the data at progressively higher levels either over the full detector or within restricted Regions-of-Interest (RoIs) identified by L1. These algorithms apply more detailed and computationally intensive reconstruction and selection criteria. The HLT software is incorporated in the ATLAS software framework, Athena, which is also used in \textit{offline} analysis for recorded data. This Athena framework are introduced in Chapter~\ref{ch:Athena}. After HLT processing, the final data output rate is reduced to approximately 3~kHz, which will then be written to permanent storage for analysis.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1.0\textwidth]{figs/chapter2/trigger_run3_1.png}
+  \caption{Schematic overview of the ATLAS trigger system in Run~3, showing the two-tier architecture of L1 and HLT triggers.}
+  \label{fig:trigger_run3}
+\end{figure}
+
+%====================================================================================================
+\subsection{Data Acquisition System}
+%====================================================================================================
+The Data Acquisition (DAQ) system is responsible for the transport and assembly of data cooperating with the two-level trigger system. It begins at the detector-specific front-end and off-detector electronics, which perform series of data processing and monitoring features before passing the trigger and other downstream systems. In Runs~1 and 2 of LHC, off-detector processing was carried out by custom hardware modules known as Read-Out Drivers (RODs), which, upon receiving a Level-1 accept signal, forwarded data to the common stage Read-Out System (ROS). The ROS, composed of commodity servers equipped with custom-built I/O cards, temporarily stores subdetector data in internal memory buffers, named Read-Out Buffers (ROBs). Data flow from the ROS to the High-Level Trigger (HLT) is orchestrated by the Data Collection Manager (DCM), which handles on-demand data requests from HLT processing nodes (HLTMPPUs). These nodes perform event reconstruction and selection, determining whether events are saved for permanent storage or discarded, and then send this decision to HLT. 
+
+The upgrades for DAQ system in Run~3 are achieved by new modules of the Front-End Link eXchange (FELIX) read-out system and software, running on commodity servers (SW ROD), which are integrated into the read-out path for detector systems with upgraded electronics, like LAr digital trigger, L1Calo, L1Topo, NSW. Both ROS and SW ROD interfaces present a unified interface to the HLT, enabling data routing in both scenarios. Once the HLT processing has been completed, passed events are forwarded to a dedicated cluster of servers (known as Sub-Farm Outputs (SFOs)) for processes like packing, compression, and transfer to offline storage. The bandwidth to permanent storage in Run~3 are allowed for up to 8 GB/s.
+
 %====================================================================================================
 \section{Upgrade for Muon Spectrometer} \label{sec:MuonUpgrade}
 %====================================================================================================
 
 %====================================================================================================
-\section{Upgrade for TDAQ System} \label{sec:TDAQUpgrade}
+\section{Upgrade for Muon Trigger System} \label{sec:MuonTriggerUpgrade}
 %====================================================================================================
+The upgraded Level-0 Muon Trigger System for the HL-LHC is expected to support higher trigger rates, increased latency, and improved muon trigger efficiency. The upgrade strategy is illustrated as a simplified block diagram in Figure~\ref{fig:muon_trigger_upgrade}. It consists of several main components: the Barrel Sector Logic, Endcap Sector Logic, the NSW Trigger Processor, and the MDT Trigger Processor. Both the Sector Logic and the NSW Trigger Processor components installed during Long Shutdown~2 (LS2) will be replaced with new hardware to accommodate the higher performance requirements. The MDT Trigger Processor will be added newly. The Barrel Sector Logic receives hit information from the RPC and energy flags from the Tile Calorimeter. The Endcap Sector Logic, covering the region $1.05 < |\eta| < 1.3$, receives hits from TGC and RPC. The NSW Trigger Processor will be deployed as a separate component from Sector Logic due to large amount of resources consumed by track-segment reconstruction of NSW hits. After initial candidate track reconstruction, the Sector Logic sends these candidates to the MDT Trigger Processor, which performs refined transverse momentum ($p_\mathrm{T}$) estimation using precision MDT hits. The filtered candidates are then passed back to the Sector Logic, and the final muon trigger decisions are forwarded to Level-0 MUCTPI.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1.0\textwidth]{figs/chapter2/muon_trigger_upgrade.png}
+  \caption{Block diagram of the upgrade strategy of Level-0 muon trigger system at HL-LHC.}
+  \label{fig:muon_trigger_upgrade}
+\end{figure}

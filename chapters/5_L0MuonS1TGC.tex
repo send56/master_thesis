@@ -165,7 +165,7 @@ To correct this discrepancy, the bitwise Simulator refers to a dedicated Look-Up
 %====================================================================================================
 \section{Local Implementation on Athena} \label{sec:LocalImplementationOnAthena}
 %====================================================================================================
-This section describes the implementation of the bitwise simulator into the ATLAS software framework, Athena, which we introduced in Chapter~\ref{ch:ATLASSoftwareFramework}. Figure~\ref{fig:L0_trigger_chain} gives the trigger and simulation chain as a possible Athena package scheme. Currently, the template algorithms are already existing in the Athena framework, and waiting to be completed by feasible implementation. The implementation work in this section is divided into two parts: 
+This section describes the implementation of the bitwise simulator into the ATLAS software framework, Athena, which we introduced in Chapter~\ref{ch:Athena}. Figure~\ref{fig:L0_trigger_chain} gives the trigger and simulation chain as a possible Athena package scheme. Currently, the template algorithms are already existing in the Athena framework, and waiting to be completed by feasible implementation. The implementation work in this section is divided into two parts: 
 First, the data input interface of the bitwise simulator was modified to conform to Athena's data flow and processing model. Second, the simulator, which originally handled only a single \(1/48\) TGC BW region, was extended to cover all sectors, including both A-side and C-side. This extension provides a testing environment for the Monte Carlo simulations described in the next chapter.
 \begin{figure}[htbp]
   \centering

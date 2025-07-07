@@ -11,3 +11,4 @@
 *.xdv
 include/bibliography.bib.bak
 
+.vscode/

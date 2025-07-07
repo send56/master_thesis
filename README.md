@@ -6,14 +6,14 @@ Master thesis by Li Zhang
 This repository includes my master-thesis by Latex based on an existing Latex template: https://github.com/cyrraz/phd-thesis developed by Cyrille Praz ([@cyrraz](https://github.com/cyrraz)).
 
 # Note:
-- Add **latex-workshop.latex.recipe.default": "latexmk (xelatex)** in the settings.json file at .vscode directory for compiling some japanese characters in this thesis.
+- Add **“latex-workshop.latex.recipe.default": "latexmk (xelatex)”** in the settings.json file at .vscode directory to set default compiler as xelatex in order to compile japanese characters in this thesis.
     ```
     {
     "latex-workshop.latex.recipe.default": "latexmk (xelatex)"
     }
     ```
 
-- Sometimes files or directories are zipped due to disk limitation. Unzip them before compiling.
+- Sometimes files or directories may be zipped due to disk limitation. Unzip them before compiling.
 
 The main files and folders are:
 * `master_thesis.tex`: main tex file whose purpose is to import all the other tex files;
