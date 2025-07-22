@@ -1,11 +1,11 @@
 %====================================================================================================
-\chapter{Evaluation of the Emulator for L0 Muon Trigger System} \label{ch:L0MuonEmulator}
+\chapter{Development of a Simple Emulator for L0 Muon Trigger System} \label{ch:L0MuonEmulator}
 %====================================================================================================
-This chapter introducts the evaluation of the emulator emulating the L0 muon trigger behavior on both barrel and endcap region, which will be called as L0MuonEmulator in this paper. The L0MuonEmulator is an existing C++ based software package on Athena that emulates the trigger decision for muons as a part of L0 trigger system for HL-LHC. The L0MuonEmulator make decisions of whether a muon candidate should be accepted or rejected based on a filtering model with pre-set parameters of posibility and a "smearing" algorithm that imitate the detector response due to the position resolution of the detectors. In this chapter, we first provide an overview of the emulator's design and logic. Next, we discuss the limitations of current muon trigger geometric due to muon detectors structure, and then made a praticle approach on the emulator to incorporate the limitations. Finally, we evaluate the performance of the emulator and highlight the need for a more precise simulation approach.
+This chapter introducts the development of a simple emulator emulating the L0 muon trigger behavior on both barrel and endcap region, which is so called as L0MuonEmulator in this paper. The L0MuonEmulator is a C++ based software package on Athena that emulates the trigger decision for muons as a part of L0 trigger system for HL-LHC. The L0MuonEmulator make decisions of whether a muon candidate should be accepted or rejected based on a filtering model with pre-set parameters of posibility and a "smearing" algorithm based on Gaussian distribution that imitate the detector response due to the momentum resolution of the detectors. In this chapter, we first provide an overview of the emulator's design and logic. Next, we discuss the limitations of current muon trigger geometric due to muon detectors structure, and then made a praticle approach on the emulator to incorporate the limitations. Finally, we evaluate the performance of the emulator and highlight the need for a more precise simulation approach.
 %====================================================================================================
-\section{Overview} \label{sec:L0MuonEmulatorOverview}
+\section{Purpose and Function} \label{sec:L0MuonPurpose}
 %====================================================================================================
-The purpose of the L0MuonEmulator is to provide a fast emulation of the Level-0 muon trigger response, using generator-level truth muons as input. At present, the emulator takes as input the \texttt{xAOD::TruthParticleContainer} containing all generated particles in a simulated Monte Carlo event and selects only final-state muons (with PDG ID $\pm13$ and status 1) that satisfy basic kinematic criteria of $p_\mathrm{T} > 2$~GeV. These selected muons are then passed through a smearing and filtering procedure that models the detector resolution and trigger efficiency, and the final output is a collection of emulated L0 muon Region-of-Interest (RoI) objects, stored in an data container \texttt{xAOD::MuonRoIContainer}. Each RoI includes information such as transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), azimuthal angle ($\phi$), and charge.
+Figure~\ref{fig:L0_trigger_chain} shows the prospective trigger chain for simulation on Athena. The \textit{Level-0 TGC Sector Logic} package, on which this research is focusing, outputs muon $p_\mathrm{T}$ and ROI (Region Of Interest) information to the downstream package \textit{Level-0 MDT Trigger-Processor} for further calculation. The purpose of the L0MuonEmulator in this chapter is to provide a temporary input interface for the next simulation of \textit{Level-0 MDT Trigger-Processor}, as a substitute of \textit{Level-0 TGC Sector Logic}. At present, the emulator takes as input the \texttt{xAOD::TruthParticleContainer} containing all generated particles in a simulated Monte Carlo event and selects only final-state muons (with PDG ID $\pm13$ and status 1) that satisfy basic kinematic criteria of $p_\mathrm{T} > 2$~GeV. These selected muons are then passed through a smearing and filtering procedure that models the detector resolution and trigger efficiency, and the final output is a collection of emulated L0 muon Region-of-Interest (RoI) objects, stored in an data container \texttt{xAOD::MuonRoIContainer}. Each RoI includes information such as transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), azimuthal angle ($\phi$), and charge.
 
 The filtering model in the L0MuonEmulator is designed to simulate the trigger efficiency as a function of muon transverse momentum. A simplified step-function model is implemented, in which muons below a certain threshold (currently 3~GeV) are discarded with 100\% inefficiency, while muons above that threshold are accepted with a fixed efficiency of 95\%. In addition, the emulator includes a basic geometric masking procedure to exclude regions outside the muon detector acceptance. Currently, this is implemented by discarding all truth muons with pseudorapidity $|\eta| > 2.41$, which roughly corresponds to the coverage limit of the L0 muon trigger chambers in ATLAS. Truth muons outside this region are automatically rejected.
 
@@ -28,37 +28,37 @@ In the ATLAS detector, the outermost muon detection system exhibits non-uniform 
   \label{fig:ATLAS_muon_geometry}
 \end{figure}
 
-The most affected subsystem is the Resistive Plate Chamber (\RPC) system in the barrel region. As illustrated in Figure~\ref{fig:RPC_structure}, the RPC detector has three layers currently in Run~3: two in the Barrel Middle (BM) station and one in the Barrel Outer (BO) station. Trigger decisions are based on spatial coincidences between these layers. However, the BM station suffers from blind zones caused by the presence of toroid coil supports, reducing the efficiency in affected regions.
+The Resistive Plate Chamber (\RPC), as a detector of the first-level muon trigger system in the barrel region, are affected by those supporting structures. The RPC detector has three layers currently in Run~3: two in the Barrel Middle (BM) station and one in the Barrel Outer (BO) station. Trigger decisions are based on spatial coincidences between these layers. However, the BM station suffers from blind zones caused by the presence of toroid coil supports, reducing the efficiency in affected regions.
+
+To overcome this limitation, at the Phase-II upgrade, a new RPC layer in the Barrel Inner (BI) station called RPC BIS78, also known as RPC0, will be added. Figure~\ref{fig:RPC_structure_upgrade} gives the RPC detector layout in Phase-II upgrade. The BI region, unaffected by mechanical obstructions, offers near-complete angular coverage. This additional layer enables a four-layer RPC configuration and allows for more flexible coincidence schemes. Three main schemes are considered: “3/3 chambers”, “3/4 chambers”, and “3/4 chambers + BI-BO”. These are defined by the number of layers required to register hits in various parts of the barrel detector. A summary of the logic combinations is provided in Table~\ref{tab:RPC_coincidence_modes}.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{figs/chapter4/RPC_detector_structure.png}
-  \caption{RPC detector layout in the Run~3 barrel configuration. The two BM layers and one BO layer form the basis for L0 muon trigger coincidence logic.}
-  \label{fig:RPC_structure}
+  \caption{RPC detector layout in the Phase-II upgrade. The RPC0 are newly added to improve acceptance caused by the holes in the RPC1 and RPC2 \cite{TDAQ_TDR}.}
+  \label{fig:RPC_structure_upgrade}
 \end{figure}
-
-To overcome this limitation, the Phase-II upgrade adds a new RPC layer in the Barrel Inner (BI) station, known as RPC0. The BI region, unaffected by mechanical obstructions, offers near-complete angular coverage. This additional layer enables a four-layer RPC configuration and allows for more flexible coincidence schemes. Three main schemes are considered: “3/3 chambers”, “3/4 chambers”, and “3/4 chambers + BI-BO”. These are defined by the number of layers required to register hits in various parts of the barrel detector. A summary of the logic combinations is provided in Table~\ref{tab:RPC_coincidence_modes}.
 
 \input{tables/RPC_coincidence_modes.tex}
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.75\textwidth]{figs/chapter4/trigger_acceptance_map_3_3.png}
-  \caption{Trigger acceptance map in $\eta$-$\phi$ space using the 3/3 chambers coincidence logic. Significant coverage holes are visible in the BM station due to toroid coil supports.}
+  \caption{Trigger acceptance map in $\eta$-$\phi$ space using the 3/3 chambers coincidence logic. Significant coverage holes are visible in the BM station due to toroid coil supports \cite{TDAQ_TDR}.}
   \label{fig:trigger_acceptance_3_3}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.75\textwidth]{figs/chapter4/trigger_acceptance_map_3_4.png}
-  \caption{Trigger acceptance map with 3/4 chambers coincidence scheme. The additional RPC0 layer in the BI station significantly improves acceptance in the central barrel region.}
+  \caption{Trigger acceptance map with 3/4 chambers coincidence scheme. The additional RPC0 layer in the BI station significantly improves acceptance in the central barrel region \cite{TDAQ_TDR}.}
   \label{fig:trigger_acceptance_3_4}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.75\textwidth]{figs/chapter4/trigger_acceptance_map_3_4_BI_BO.png}
-  \caption{Trigger acceptance using 3/4 chambers + BI-BO logic. BI-BO mode offers further coverage in outer barrel regions.}
+  \caption{Trigger acceptance using 3/4 chambers + BI-BO logic. BI-BO mode offers further coverage in outer barrel regions \cite{TDAQ_TDR}.}
   \label{fig:trigger_acceptance_3_4_BI_BO}
 \end{figure}
 
@@ -68,7 +68,7 @@ As evident from the comparison, the Phase-II RPC layout significantly enhances t
 %====================================================================================================
 To improve the realism of the emulator, a geometry-based optimization was implemented in the smearing algorithm to account for the position dependence of the trigger efficiency in the $(\eta, \phi)$ plane.
 
-As described in Section~\ref{sec:L0MuonEmulatorOverview}, the original implementation adopted a simplified geometric acceptance cut by discarding all truth muons with pseudorapidity $|\eta| > 2.41$, roughly corresponding to the nominal detector coverage of the L0 muon chambers. However, this approach did not account for local inefficiencies within the nominal acceptance region caused by mechanical structures such as the toroid coil supports.
+As described in Section~\ref{sec:L0MuonPurpose}, the original implementation adopted a simplified geometric acceptance cut by discarding all truth muons with pseudorapidity $|\eta| > 2.41$, roughly corresponding to the nominal detector coverage of the L0 muon chambers. However, this approach did not account for local inefficiencies within the nominal acceptance region caused by mechanical structures such as the toroid coil supports.
 
 To address this, we improved the emulator's practical performance by incorporating $(\eta, \phi)$-dependent masking based on the trigger acceptance map: Figure~\ref{fig:trigger_acceptance_3_4_BI_BO} discussed in Section~\ref{subsec:MuonTriggerAcceptance}. In the improved implementation, specific $(\eta, \phi)$ intervals corresponding to uncovered regions are manually vetoed within the smearing algorithm. This allows the emulator to more accurately reflect the spatial acceptance of the real detector, particularly in the barrel region where such gaps are most significant.
 
@@ -76,17 +76,10 @@ To address this, we improved the emulator's practical performance by incorporati
 %====================================================================================================
 \section{Performance Evaluation} \label{sec:L0MuonEmulatorPerformance}
 %====================================================================================================
-In this section, we evaluate the performance of the L0MuonEmulator after incorporating the geometry-based practical approach. The assessment focuses on key observables relevant to trigger behavior, including the distributions of muon transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), and azimuthal angle ($\phi$) before and after trigger filtering. Additionally, the trigger efficiency as a function of $p_\mathrm{T}$ is examined to illustrate the momentum-dependent response of the emulator. Two-dimensional $(\eta, \phi)$ acceptance maps are also presented to visualize the spatial dependence of the trigger response and to facilitate a direct comparison with Figure~\ref{fig:trigger_acceptance_3_4_BI_BO}. These studies are intended to validate the emulator's consistency with the
+In this section, we evaluate the performance of the L0MuonEmulator after incorporating the geometry-based practical approach. The assessment focuses on the relationship between trigger efficiency and key variables like muon transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), and azimuthal angle ($\phi$). The trigger efficiency as a function of $p_\mathrm{T}$ is examined to illustrate the momentum-dependent response of the emulator. Two-dimensional $(\eta, \phi)$ trigger acceptance maps are then presented to visualize the spatial dependence of the trigger response. These studies are intended to validate the emulator's consistency with the
 realistic detector geometry and expected performance.
 
-We begin with the transverse momentum ($p_\mathrm{T}$) distributions shown in Figure~\ref{fig:comparison_hist_pt}. The panel presents the $p_\mathrm{T}$ spectra before and after trigger filtering. As expected, muons with $p_\mathrm{T} < 3$~GeV are completely suppressed, while the acceptance increases gradually with $p_\mathrm{T}$. This reflects the effect of the emulator’s threshold-based filtering logic. And to evaluate the efficiency performance seperatedly in both endcap($|\eta| < 1.05$) and barred($1.05 < |\eta| < 2.41$) region, Figure~\ref{fig:eff_pt_endcap} and Figure~\ref{fig:eff_pt_barrel} gives the efficiency of $p_\mathrm{T}$ in both regions.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter4/comparison_hist_pt.pdf}
-  \caption{$p_\mathrm{T}$ distributions of truth muons before and after trigger filtering.}
-  \label{fig:comparison_hist_pt}
-\end{figure}
+Figure~\ref{fig:eff_pt_endcap} and Figure~\ref{fig:eff_pt_barrel} shows the efficiency distributions of $p_\mathrm{T}$ in both endcap and barrel regions.
 
 \begin{figure}[htbp]
   \centering
@@ -102,23 +95,7 @@ We begin with the transverse momentum ($p_\mathrm{T}$) distributions shown in Fi
   \label{fig:eff_pt_barrel}
 \end{figure}
 
-Figure~\ref{fig:comparison_hist_eta} and Figure~\ref{fig:comparison_hist_phi} show the pseudorapidity ($\eta$) and azimuthal angle ($\phi$) distributions before and after filtering. In the $\eta$ distribution, muons with $|\eta| > 2.41$ are not accepted, reflecting the emulator's geometric acceptance. Additionally, a visible dip near $\eta = 0$ appears due to the manually masked hole region. The $\phi$ distribution exhibits more uniformly distributed inefficiencies, which aligns with the emulator's $(\eta, \phi)$ veto logic.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter4/comparison_hist_eta.pdf}
-  \caption{Comparison of $\eta$ distributions before and after the trigger filtering.}
-  \label{fig:comparison_hist_eta}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter4/comparison_hist_phi.pdf}
-  \caption{Comparison of $\phi$ distributions before and after the trigger filtering.}
-  \label{fig:comparison_hist_phi}
-\end{figure}
-
-To evaluate the emulator's spatial denpendence, Figure~\ref{fig:eta_phi_comparison} compares the two-dimensional $(\eta, \phi)$ acceptance maps: the reference map from Phase-II trigger studies (top) and the emulator-generated efficiency map (bottom). Dashed blue boxes in the right panel indicate the manually masked regions. Only obvious region around $\eta = 0$ and $|\eta| = 0.7$ are masked here, while other unobvious region are ignored here. This comparison indicates significant mismatch of both coverage and accuracy.
+To show the emulator's spatial denpendence, Figure~\ref{fig:eta_phi_comparison} gives the two-dimensional $(\eta, \phi)$ acceptance maps: the reference map from Phase-II trigger studies (top) and the emulator-generated efficiency map (bottom). Dashed blue boxes in the panel below indicate the manually masked regions. Only obvious region around $\eta = 0$ and $|\eta| = 0.7$ are masked here, while other unobvious region are ignored here.
 
 \begin{figure}[htbp]
   \centering
@@ -131,4 +108,4 @@ To evaluate the emulator's spatial denpendence, Figure~\ref{fig:eta_phi_comparis
   \label{fig:eta_phi_comparison}
 \end{figure}
 
-In conclusion, according to the efficiency performance on both $p_\mathrm{T}$ and $(\eta, \phi)$ plane, although the implemented region masking improves the realism of the emulator, it remains insufficient to meet the precision required for accurate muon trigger simulation for physics analysis. A complete simulator of high precision that simulates the trigger logic in full detail using hardware-level bitmap inputs is necessary. This motivates the development of a bitwise simulation framework based on the TGC trigger system, which will be introduced in the next chapter.
+In conclusion, according to the efficiency performance on both $p_\mathrm{T}$ and $(\eta, \phi)$ plane, despite of the good efficiency performance on $p_\mathrm{T}$ and improved realism by implemented region masking, it yet remains incapability to reproduce physical phenomena, since it does not simulate the trigger logic at all. Therefore, a complete simulator of high precision that simulates the trigger logic in full detail is still necessary for the Athena implementation. This motivates the development of the simulator for TGC Sector Logic, which will be introduced in the next chapter.

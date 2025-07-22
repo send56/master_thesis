@@ -1053,7 +1053,7 @@ FUNCTION {techreport}
   blank.sep
   format.tr.number output
   institution "institution" output.check
-  address "address" output.check
+  address output
   blank.sep
   format.date.paren "year" output.check
   formatfull.doi  output

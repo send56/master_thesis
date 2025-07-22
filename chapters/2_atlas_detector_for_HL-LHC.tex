@@ -1,7 +1,7 @@
 %====================================================================================================
-\chapter{The ATLAS Experiment for HL-LHC} \label{ch:ATLASforHLLHC} 
+\chapter{The ATLAS Experiment} \label{ch:ATLAS} 
 %====================================================================================================
-The ATLAS experiment is planned to upgrade in preparation for the HL-LHC. As the pile-up increases due to higher instantaneous luminosity, the event rate, including background event rate, will also rise. To cope with this, the detector will be enhanced to suppress backgrounds and maintain high resolution. This chapter introduces the components of the ATLAS detector relevant to this research-especially the muon spectrometer and the TDAQ system-and then outlines the planned upgrades to these subsystems for the HL-LHC.
+The ATLAS experiment at the LHC uses a multipurpose particle detector with a forward–backward symmetric cylindrical geometry and a near 4$\pi$ coverage in solid angle, expected to explore physics phenomena from precise measurements of Standard Model parameters to the search for new particles and interactions. In preparation for the HL-LHC, the ATLAS detector is undergoing a series of upgrades. As the instantaneous luminosity increases, resulting in higher pile-up as well as the background event rates, the detector will be enhanced to suppress backgrounds and maintain high resolution. This chapter gives the introduction of ATLAS experiment on its coordinate system, magnet system and muon detector system related to this research. After that, the ATLAS Phase-II upgrade strategy is briefly introduced.
 %====================================================================================================
 \section{Coordinate System} \label{sec:CoordinateSystem}
 %====================================================================================================
@@ -80,6 +80,27 @@ The trigger system covers the pseudorapidity range $|\eta| < 2.4$. In the barrel
 \end{figure}
 
 %====================================================================================================
+\subsection{Resistive Plate Chamber (RPC)}
+%====================================================================================================
+The Resistive Plate Chambers (RPCs) serve as the barrel trigger detectors in the muon spectrometer system. The RPC is a gaseous detector with two parallel resistive plates and a 2~mm gas gap. It operates in avalanche mode with fast timing ($\sim$5~ns), using a C$_2$H$_2$F$_4$-based gas mixture. High voltage induces avalanches, and signals are read out via capacitive coupling to external strips. A schematic of RPC chamber is shown in Figure~\ref{fig:RPC_cross_section}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/chapter2/RPC_cross_section.png}
+  \caption{A Cross-section view of an RPC chamber. Each chamber is composed of two joined units, with each unit comprising dual gas volumes, four resistive electrodes, and readout planes sensitive to both transverse and longitudinal coordinates. Dimensions are given in mm \cite{ATLASDetector2008}.}
+  \label{fig:RPC_cross_section}
+\end{figure}
+
+They are arranged in three concentric cylindrical layers around the beam axis, referred to as RPC1, RPC2, and RPC3 stations. Each station comprises two independent detector layers capable of measuring both $\eta$ and $\phi$, providing up to six hit points for a traversing muon. The inner two stations (RPC1 and RPC2) are used for low-$p_\mathrm{T}$ triggers (6--9~GeV) with a 3-out-of-4 coincidence logic, while the outer RPC3 station enables high-$p_\mathrm{T}$ triggers (9--35~GeV) using a 1-out-of-2 OR logic. A sector of RPC layout in ATLAS is shown in Figure~\ref{fig:RPC_layout}. This layered coincidence strategy reduces noise-induced fake triggers and ensures robustness against local inefficiencies. 
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/chapter2/RPC_layout.png}
+  \caption{A cross-sectional view of the upper barrel region with the RPC chambers highlighted in color. In the middle station, RPC1 and RPC2 are placed respectively below and above the MDT chambers. In the outer station, RPC3 is located above the MDT in large sectors and below it in small sectors. All dimensions are given in millimeters \cite{ATLASDetector2008}.}
+  \label{fig:RPC_layout}
+\end{figure}
+
+%====================================================================================================
 \subsection{Monitored Drift Tube (MDT)}
 %====================================================================================================
 The Monitored Drift Tubes (MDTs) are precision tracking detectors covering the region of $|\eta| < 2.7$. They consist of layered arrays of pressurized drift tubes as base elements, each with a diameter of 29.970~mm and a central anode wire of 50~$\mu$m in diameter. A cross-section view and a longitudinal cut view of a drift tube of the MDT chamber are shown in Figures~\ref{fig:MDT_tube}. The tubes are filled with a gas mixture of argon and carbon dioxide (Ar/CO$_2$ = 93/7) at 3~bar, and a high voltage of 3080~V is applied between the cathode tube and the central wire \cite{ATLASDetector2008}. As charged particles traverse the gas, they cause ionisation, and make electrons drift toward the anode wire. By measuring this drift time, the radial position of the particle's trajectory can be reconstructed with a spatial resolution of up to 35~$\mu$m. The maximum drift time within a tube is about 700~ns.
@@ -104,46 +125,13 @@ The Monitored Drift Tubes (MDTs) are precision tracking detectors covering the r
 \end{figure}
 
 %====================================================================================================
-\subsection{Cathode Strip Chambers (CSC)}
-%====================================================================================================
-Cathode Strip Chambers (CSCs) are installed in the innermost layer of the muon endcap region for $|\eta| > 2.0$, where the hit rate exceeds the operating limit of MDTs. CSCs are capable of handling counting rates up to 1000~Hz/cm$^2$, offering high-rate tolerance, excellent spatial resolution, and strong double-track separation performance. Each CSC is a multiwire proportional chamber, with wires oriented in the radial direction and both cathodes segmented. The cathode strips perpendicular to the wires provide the precision $\eta$ coordinate, while the strips parallel to the wires measure the $\phi$ coordinate. The particle position is determined by interpolating the charge distribution induced on neighboring cathode strips. The CSC system has two disks on both sides, with eight chambers each (eight small and eight large) as illustrated in Figure~\ref{fig:CSC_layout}.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.5\textwidth]{figs/chapter2/CSC_layout.png}
-  \caption{Schematic of CSC chambers layout in ATLAS. Large and small chambers are marked as different colors \cite{ATLASDetector2008}.}
-  \label{fig:CSC_layout}
-\end{figure}
-
-%====================================================================================================
-\subsection{Resistive Plate Chamber (RPC)}
-%====================================================================================================
-The Resistive Plate Chambers (RPCs) serve as the barrel trigger detectors in the muon spectrometer system. The RPC is a gaseous detector with two parallel resistive plates and a 2~mm gas gap. It operates in avalanche mode with fast timing ($\sim$5~ns), using a C$_2$H$_2$F$_4$-based gas mixture. High voltage induces avalanches, and signals are read out via capacitive coupling to external strips. A schematic of RPC chamber is shown in Figure~\ref{fig:RPC_cross_section}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter2/RPC_cross_section.png}
-  \caption{A Cross-section view of a RPC chamber. Each chamber is composed of two joined units, with each unit comprising dual gas volumes, four resistive electrodes, and readout planes sensitive to both transverse and longitudinal coordinates. Dimensions are given in mm \cite{ATLASDetector2008}.}
-  \label{fig:RPC_cross_section}
-\end{figure}
-
-They are arranged in three concentric cylindrical layers around the beam axis, referred to as RPC1, RPC2, and RPC3 stations. Each station comprises two independent detector layers capable of measuring both $\eta$ and $\phi$, providing up to six hit points for a traversing muon. The inner two stations (RPC1 and RPC2) are used for low-$p_\mathrm{T}$ triggers (6--9~GeV) with a 3-out-of-4 coincidence logic, while the outer RPC3 station enables high-$p_\mathrm{T}$ triggers (9--35~GeV) using a 1-out-of-2 OR logic. A sector of RPC layout in ATLAS is shown in Figure~\ref{fig:RPC_layout}. This layered coincidence strategy reduces noise-induced fake triggers and ensures robustness against local inefficiencies. 
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter2/RPC_layout.png}
-  \caption{A cross-sectional view of the upper barrel region with the RPC chambers highlighted in color. In the middle station, RPC1 and RPC2 are placed respectively below and above the MDT chambers. In the outer station, RPC3 is located above the MDT in large sectors and below it in small sectors. All dimensions are given in millimeters \cite{ATLASDetector2008}.}
-  \label{fig:RPC_layout}
-\end{figure}
-
-%====================================================================================================
 \subsection{Thin Gap Chamber (TGC)} \label{sec:TGC}
 %====================================================================================================
 The Thin Gap Chambers (TGCs) are used in the endcap region of the ATLAS muon spectrometer as trigger detectors, covering the pseudorapidity range $1.05 < |\eta| < 2.4$. They are positioned on both sides of the toroidal magnetic field, with the inner detectors located in the Endcap Inner (EI) region and the outer detectors forming the Big Wheel (\BW). The picture of TGC BW are given as Figure\ref{fig:TGC_pic}. The BW TGCs consist of three stations, designated as M1, M2, and M3 from the inner to outer layers.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter2/TGC_pic.jpg}
+  \includegraphics[width=0.95\textwidth]{figs/chapter2/TGC_pic.jpg}
   \caption{The picture of one side of TGC BW, including 24 sectors along $\phi$ direction.\cite{TGCInstallation}.}
   \label{fig:TGC_pic}
 \end{figure}
@@ -161,14 +149,34 @@ For higher space resolution during reconstruction, stations are composed of mult
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/chapter2/staggeredID.png}
+  \includegraphics[width=0.95\textwidth]{figs/chapter2/staggeredID.png}
   \caption{Correspondence table between channel number and staggered ID, Illustrated of the endcap wire segment.}
   \label{fig:staggeredID}
 \end{figure}
 
 %====================================================================================================
-\paragraph{New Small Wheel (NSW)} \label{sec:NSW}
+\subsection{New Small Wheel (NSW)}
 %====================================================================================================
+The New Small Wheel (\NSW) is a muon detector located inside the toroidal magnetic field region, covering the pseudorapidity range of $1.3 < |\eta| < 2.7$. It replaces the former Cathode Strip Chambers (CSCs) and the inner Multi-Wire Drift Tubes (MDTs) used in Phase-I in the endcap region. The NSW has two sides, each sides consists of 16 sectors, including 8 large sectors and 8 small sectors which overlap each other mechanically. The illustration of NSW sectors layout and the layer structure are shown in Figure~\ref{fig:NSW}. The NSW consists of 16 layers arranged in a sandwiched structure: four layers of small-strip Thin Gap Chambers (sTGCs), followed by two sets of four-layer Micromegas (MM) chambers, and again four layers of sTGCs. This multilayer configuration enables precise determination of muon position and angle by correlating hit positions across layers.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figs/chapter2/NSW.png}
+  \caption{Schematic of the NSW layout and layer structure \cite{ATLASRun3Detector}.}
+  \label{fig:NSW}
+\end{figure}
+
+The sTGC is a multi-wire proportional chamber (MWPC) with a 2.8~mm gas gap. It uses tungsten wires, spaced by 18~mm, to measure the $\phi$ direction, and readout strips for the $\eta$ direction. These wires are placed between two cathode planes spaced 1.4~mm apart, providing high spatial resolution. The MM is a micro-pattern gaseous detector composed of a 5~mm drift gap and a 128~$\mu$m amplification region separated by a stainless-steel mesh. The amplified signals are read out via 400~$\mu$m pitch strips, offering high rate capability and precision tracking. 
+The NSW is designed to achieve spatial resolutions of 0.005 in $\eta$, 10~mrad in $\phi$, and an angular resolution of 1~mrad relative to the beam axis.
+
+During Run~3, the NSW, together with the Tile Calorimeter and outer TGC detectors, participates in “Inner Coincidence” logic to reject ``fake muons'' not originating from the interaction point (IP), as illustrated in Figure~\ref{fig:InnerCoin}. For the HL-LHC upgrade, additional detectors such as TGC EIL4 and RPC BIS78 will be introduced to support this coincidence scheme, further reducing the trigger rate and improving efficiency.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figs/chapter2/InnerCoin.png}
+  \caption{An example of a ``fake muon'', in which a neutral hadron originating from the beam pipe interacts with the internal structures of the ATLAS detector and produces charged particles through secondary scattering. \cite{kawamoto}.}
+  \label{fig:InnerCoin}
+\end{figure}
 
 %====================================================================================================
 \section{TDAQ System} \label{sec:TDAQSystem}
@@ -188,7 +196,7 @@ Once the events are accepted at L1 trigger, they are then sent to a software-bas
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/chapter2/trigger_run3_1.png}
-  \caption{Schematic overview of the ATLAS trigger system in Run~3, showing the two-tier architecture of L1 and HLT triggers.}
+  \caption{Schematic overview of the ATLAS trigger system in Run~3, showing the two-tier architecture of L1 and HLT triggers \cite{ATLASRun3Trigger}.}
   \label{fig:trigger_run3}
 \end{figure}
 
@@ -197,11 +205,25 @@ Once the events are accepted at L1 trigger, they are then sent to a software-bas
 %====================================================================================================
 The Data Acquisition (DAQ) system is responsible for the transport and assembly of data cooperating with the two-level trigger system. It begins at the detector-specific front-end and off-detector electronics, which perform series of data processing and monitoring features before passing the trigger and other downstream systems. In Runs~1 and 2 of LHC, off-detector processing was carried out by custom hardware modules known as Read-Out Drivers (RODs), which, upon receiving a Level-1 accept signal, forwarded data to the common stage Read-Out System (ROS). The ROS, composed of commodity servers equipped with custom-built I/O cards, temporarily stores subdetector data in internal memory buffers, named Read-Out Buffers (ROBs). Data flow from the ROS to the High-Level Trigger (HLT) is orchestrated by the Data Collection Manager (DCM), which handles on-demand data requests from HLT processing nodes (HLTMPPUs). These nodes perform event reconstruction and selection, determining whether events are saved for permanent storage or discarded, and then send this decision to HLT. 
 
-The upgrades for DAQ system in Run~3 are achieved by new modules of the Front-End Link eXchange (FELIX) read-out system and software, running on commodity servers (SW ROD), which are integrated into the read-out path for detector systems with upgraded electronics, like LAr digital trigger, L1Calo, L1Topo, NSW. Both ROS and SW ROD interfaces present a unified interface to the HLT, enabling data routing in both scenarios. Once the HLT processing has been completed, passed events are forwarded to a dedicated cluster of servers (known as Sub-Farm Outputs (SFOs)) for processes like packing, compression, and transfer to offline storage. The bandwidth to permanent storage in Run~3 are allowed for up to 8 GB/s.
+The upgrades for DAQ system in Run~3 are achieved by new modules of the Front-End Link eXchange (FELIX) read-out system and software, running on commodity servers (SW ROD), which are integrated into the read-out path for detector systems with upgraded electronics, like LAr digital trigger, L1Calo, L1Topo, and New Small Wheel (NSW) located at the inner region of endcap. Both ROS and SW ROD interfaces present a unified interface to the HLT, enabling data routing in both scenarios. Once the HLT processing has been completed, passed events are forwarded to a dedicated cluster of servers (known as Sub-Farm Outputs (SFOs)) for processes like packing, compression, and transfer to offline storage. The bandwidth to permanent storage in Run~3 are allowed for up to 8 GB/s.
 
 %====================================================================================================
-\section{Upgrade for Muon Spectrometer} \label{sec:MuonUpgrade}
+\section{Upgrade for TDAQ System} \label{sec:TDAQUpgrade}
 %====================================================================================================
+To cope with the significantly increased event rates at the HL-LHC, the ATLAS TDAQ system is undergoing a comprehensive Phase-II upgrade. The upgraded baseline design are shown schematically in Figure~\ref{fig:TDAQ_baseline}. which includes enhancements to the Level-0 (L0) Trigger, Event Filter (EF) and Data Acquisition (DAQ) systems.
+
+The upgraded Level-0 Trigger System consists of subsystems of L0Calo, L0Muon, the Global Trigger, and the Central Trigger Processor (CTP). The L0Calo system is mainly based on the former L1Calo system with minor changes. For L0Muon, a thorough upgrade is performed comparing to Run~3, allowing it identify muon candidates by data from all the muon subsystems and a subset of the Tile Calorimeter. To improve the trigger coverage, new RPC inner stations new function of MDT precise momentum measurements are added into L0Muon system. The Global Trigger system are implemented newly as a subsystem of L0 Trigger, which is responsible for offline-like algorithms on full-granularity calorimeter data. The event rate after L0 Trigger filtering will be less than 1~MHz.
+
+Once the L0A is issued, event data from detector front-end electronics are sent to the Front-End Link eXchange (FELIX) system, as the first component of the Readout subsystem. From there, data are routed through the Data Handlers and buffered in the Dataflow subsystem. The Dataflow subsystem ``adjust'' the event data by a series of processes like buffering, transporting, aggregating and compressing, to ensure consistency with the input interface of the Event Filter (EF) system.
+
+The Event Filter (EF) system is composed of the EF processor farm and a newly added Hardware-based Tracking for the Trigger (HTT) subsystem. The Processor Farm handles software-based event reconstruction and filtering at rates up to 1~MHz. To support this, the HTT performs fast hardware-based track reconstruction in two stages: an initial regional tracking stage that reduces the rate to ~400~kHz by quickly background rejection, and a later global tracking stage at ~100~kHz to produce tracks closer to offline analysis quality for tasks like $b$-jet tagging, ${E}_\mathrm{T}^\mathrm{miss}$ soft term calculation, soft jets and pile-up suppression. Finally, events accepted by the EF are recorded at a rate of 10~kHz. The raw output event size is about 6~MB, and the total bandwidth is 60~GB/s.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1.0\textwidth]{figs/chapter2/TDAQ_baseline.png}
+  \caption{Baseline design of the upgraded TDAQ system for HL-LHC \cite{TDAQ_TDR}.}
+  \label{fig:TDAQ_baseline}
+\end{figure}
 
 %====================================================================================================
 \section{Upgrade for Muon Trigger System} \label{sec:MuonTriggerUpgrade}
@@ -211,6 +233,6 @@ The upgraded Level-0 Muon Trigger System for the HL-LHC is expected to support h
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/chapter2/muon_trigger_upgrade.png}
-  \caption{Block diagram of the upgrade strategy of Level-0 muon trigger system at HL-LHC.}
+  \caption{Block diagram of the upgrade strategy of Level-0 muon trigger system at HL-LHC \cite{TDAQ_TDR}.}
   \label{fig:muon_trigger_upgrade}
 \end{figure}
