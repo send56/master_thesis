@@ -1,7 +1,7 @@
 %====================================================================================================
 \chapter{Development of a Simple Emulator for L0 Muon Trigger System} \label{ch:L0MuonEmulator}
 %====================================================================================================
-This chapter introducts the development of a simple emulator emulating the L0 muon trigger behavior on both barrel and endcap region, which is so called as L0MuonEmulator in this paper. The L0MuonEmulator is a C++ based software package on Athena that emulates the trigger decision for muons as a part of L0 trigger system for HL-LHC. The L0MuonEmulator make decisions of whether a muon candidate should be accepted or rejected based on a filtering model with pre-set parameters of posibility and a "smearing" algorithm based on Gaussian distribution that imitate the detector response due to the momentum resolution of the detectors. In this chapter, we first provide an overview of the emulator's design and logic. Next, we discuss the limitations of current muon trigger geometric due to muon detectors structure, and then made a praticle approach on the emulator to incorporate the limitations. Finally, we evaluate the performance of the emulator and highlight the need for a more precise simulation approach.
+This chapter introducts the development of a simple emulator emulating the L0 muon trigger behavior on both barrel and endcap region, which is so called as L0MuonEmulator. The L0MuonEmulator is a C++ based software package on Athena that emulates the trigger decision for muons as a part of L0 trigger system for HL-LHC. The L0MuonEmulator makes decisions of whether a muon candidate should be accepted or rejected based on a pre-set filtering model, and then "smears" the transverse momentum $p_\mathrm{T}$ of muons, as an imitation of detector response due to the momentum resolution of the detectors. In this chapter, we first provide an overview of the emulator's design and logic. Next, we discuss the limitations of current muon trigger geometric due to muon detectors structure, and then made a pratical approach on the emulator to incorporate the limitations. Finally, we evaluate the performance of the emulator and highlight the need for a more precise simulation approach.
 %====================================================================================================
 \section{Purpose and Function} \label{sec:L0MuonPurpose}
 %====================================================================================================
@@ -11,7 +11,7 @@ The filtering model in the L0MuonEmulator is designed to simulate the trigger ef
 
 The smearing algorithm emulates the detector resolution by applying a Gaussian fluctuation to the inverse transverse momentum ($q/p_\mathrm{T}$) of the selected muons. The width of the Gaussian (i.e., the resolution) is parameterized as 5\% of the input $q/p_\mathrm{T}$ value. The $\eta$ and $\phi$ positions are not smeared at this stage, as the resolution of the RoI granularity is coarser than the smearing scale, and the binning dominates the uncertainty. Once smeared, the kinematic variables are encoded into a bit-wise RoI word format compatible with the hardware-level representation used in the ATLAS trigger system.
 
-Currently, the L0MuonEmulator provides several functionalities beyond simple emulation. It includes an extensive monitoring infrastructure based on the Athena Monitoring Framework. A series of histograms are automatically produced during the execution to validate the emulator output against the input truth muon properties. These include distributions of $\eta$, $\phi$, $p_\mathrm{T}$, and $q/p_\mathrm{T}$ before and after smearing, as well as resolution plots such as $\Delta\eta$, $\Delta\phi$, and relative $p_\mathrm{T}$ deviation. These features support the evaluation of trigger-level muon reconstruction quality.
+Currently, the L0MuonEmulator provides several functionalities beyond simple emulation. It includes an extensive monitoring infrastructure based on the Athena Monitoring Framework. A series of histograms are produced during the execution to validate the emulator output against the input truth muon properties. These include distributions of $\eta$, $\phi$, $p_\mathrm{T}$, and $q/p_\mathrm{T}$ before and after smearing, as well as resolution plots such as $\Delta\eta$, $\Delta\phi$, and relative $p_\mathrm{T}$ deviation. These features support the evaluation of trigger-level muon reconstruction quality.
 
 Below is a summary table of the output histograms and their corresponding physical meaning.
 \input{tables/L0MuonEmulator_parameters.tex}
@@ -76,8 +76,7 @@ To address this, we improved the emulator's practical performance by incorporati
 %====================================================================================================
 \section{Performance Evaluation} \label{sec:L0MuonEmulatorPerformance}
 %====================================================================================================
-In this section, we evaluate the performance of the L0MuonEmulator after incorporating the geometry-based practical approach. The assessment focuses on the relationship between trigger efficiency and key variables like muon transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), and azimuthal angle ($\phi$). The trigger efficiency as a function of $p_\mathrm{T}$ is examined to illustrate the momentum-dependent response of the emulator. Two-dimensional $(\eta, \phi)$ trigger acceptance maps are then presented to visualize the spatial dependence of the trigger response. These studies are intended to validate the emulator's consistency with the
-realistic detector geometry and expected performance.
+In this section, we evaluate the performance of the L0MuonEmulator after incorporating the geometry-based practical approach. The assessment focuses on the relationship between trigger efficiency and key variables like muon transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), and azimuthal angle ($\phi$). The trigger efficiency as a function of $p_\mathrm{T}$ is examined to illustrate the momentum-dependent response of the emulator. Two-dimensional $(\eta, \phi)$ trigger acceptance maps are then presented to visualize the spatial dependence of the trigger response. These evaluations were performed using a Monte Carlo sample of $Z \to \mu^+ \mu^-$ events at a center-of-mass energy of $13.6\,\mathrm{TeV}$, with a total of $60{,}000$ events.
 
 Figure~\ref{fig:eff_pt_endcap} and Figure~\ref{fig:eff_pt_barrel} shows the efficiency distributions of $p_\mathrm{T}$ in both endcap and barrel regions.
 
@@ -104,7 +103,7 @@ To show the emulator's spatial denpendence, Figure~\ref{fig:eta_phi_comparison} 
   
   \includegraphics[width=0.95\textwidth]{figs/chapter4/efficiency_eta_phi_2D.pdf}
   
-  \caption{Comparison of trigger acceptance maps in the $(\eta, \phi)$ plane. Top: Reference acceptance from Phase-II studies. Bottom: Emulator efficiency map with manually masked regions.}
+  \caption{Comparison of trigger acceptance maps in the $(\eta, \phi)$ plane of barrel region. Top: Reference acceptance from Phase-II studies. Bottom: Emulator efficiency map with manually masked regions.}
   \label{fig:eta_phi_comparison}
 \end{figure}
 
