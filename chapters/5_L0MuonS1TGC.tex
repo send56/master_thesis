@@ -1,7 +1,7 @@
 %====================================================================================================
 \chapter{Development of a Simulator for L0 Endcap Muon Trigger System} \label{ch:L0MuonS1TGC}
 %====================================================================================================
-This chapter presents the development of a simulator for the TGC Sector Logic, which performs the trigger behavior on the endcap region of L0 muon trigger system. This simulator, so called L0MuonS1TGC simulator, is for a detailed and precise simulation, based on an existing bit-level simulator called "bitwise simulator" which emulates the firmware of TGC sector logic. The chapter begins by describing the structure and logic of the original bitwise simulator, including its hit processing and reconstruction pipeline. It then introduces the local implementation of this simulator within the ATLAS software framework, Athena, enabling simulation with full endcap part of detector geometry. Finally, it discusses the memory optimization techniques applied to the Look-Up Tables (LUTs) achieved as a preparation for implementation on Athena itself.
+This chapter presents the development of a simulator for the TGC Sector Logic, which performs the trigger behavior on the endcap region of L0 muon trigger system. This simulator, so called L0MuonS1TGC simulator, is for a detailed and precise simulation, based on an existing bit-level simulator called "bitwise simulator" which emulates the firmware of TGC sector logic. The chapter begins by describing the structure and logic of the original bitwise simulator, including its hit processing and reconstruction pipeline. It then introduces the local implementation of this simulator within the ATLAS software framework, Athena, followed by a memory optimization technique applied as a preparation for implementation on Athena itself. Finally, an efficiency performance of the implemented simulator is evaluated using MC simulation.
 %====================================================================================================
 \section{Bitwise Simulator} \label{sec:BitwiseSimulator}
 %====================================================================================================
@@ -17,16 +17,16 @@ TrackSelector selects muon candidates with higher $p_\mathrm{T}$ and forwards th
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/chapter5/endcap_and_forward_region.png}
-  \caption{Schematic view of Big Wheel (\BW) TGC of an Endcap \SL blade, which is segmented into the "Endcap 1", "Endcap 2", and Forward trigger sectors \cite{EndcapSLPDR}.}
+  \caption{Schematic view of Big Wheel (BW) TGC of an Endcap SL blade, which is segmented into the "Endcap 1", "Endcap 2", and Forward trigger sectors \cite{EndcapSLPDR}.}
   \label{fig:endcapAndForward}
 \end{figure}
 
 %====================================================================================================
 \subsection{Channel Mapping} \label{subsec:ChannelMapping}
 %====================================================================================================
-Each \SL corresponds to one of the 1/24 repetitive segments of the TGC Big Wheel (\BW). And each SL board receives hit information from 29 Primary Processor boards (\PS boards) in the previous stage via two optical links. Each link transmits 128 bits of data every 25 ns, resulting in a complete input to the Sector Logic in the form of a 128-bit $\times$ 58-link bitmap。
+Each SL corresponds to one of the 1/24 repetitive segments of the TGC Big Wheel (BW). And each SL board receives hit information from 29 Primary Processor boards (PS boards) in the previous stage via two optical links. Each link transmits 128 bits of data every 25 ns, resulting in a complete input to the Sector Logic in the form of a 128-bit $\times$ 58-link bitmap。
 
-As the first stage of the bitwise simulator, the Channel Mapping module is responsible for converting this 128 $\times$ 58 bitmap input—originating from the \PS boards—into a format suitable for the next processing stage, the Intra-Station Coincidence. This conversion process is referred to as \textit{mapping}. During this step, the original bitmap is transformed into a well-structured, intuitive, three-dimensional vector format that reflects the geometrical structure of the TGC detector. Each hit is represented by a tuple of subsector, layer, and channel, uniquely identifying its position within the detector. This structured representation enables efficient coincidence detection across different layers within the same station in the subsequent logic stage.
+As the first stage of the bitwise simulator, the Channel Mapping module is responsible for converting this 128 $\times$ 58 bitmap input—originating from the PS boards—into a format suitable for the next processing stage, the Intra-Station Coincidence. This conversion process is referred to as \textit{mapping}. During this step, the original bitmap is transformed into a well-structured, intuitive, three-dimensional vector format that reflects the geometrical structure of the TGC detector. Each hit is represented by a tuple of subsector, layer, and channel, uniquely identifying its position within the detector. This structured representation enables efficient coincidence detection across different layers within the same station in the subsequent logic stage.
 %====================================================================================================
 \subsection{Intra Station Coincidence} \label{subsec:IntraCoin}
 %====================================================================================================
@@ -49,7 +49,7 @@ Using the combination of Position IDs calculated from the three stations M1, M2,
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/chapter5/endcap_trigger_logic_concept.png}
-  \caption{Reconstruction logic of the endcap muon trigger. Note that the quantity labeled as \textit{dR} in the figure corresponds to $\Delta\theta$ in the coordinate system used in this paper \cite{akatsuka}.}
+  \caption{Reconstruction logic of the endcap muon trigger \cite{akatsuka}. Note that the quantity labeled as \textit{dR} in the figure corresponds to $\Delta\theta$ in the coordinate system used in this paper.}
   \label{fig:EndcapTriggerLogic}
 \end{figure}
 
@@ -187,7 +187,7 @@ Figure~\ref{fig:input_adaptation} illustrates the forepart of data preparation a
   \label{fig:input_adaptation}
 \end{figure}
 
-The L0TGCSimulator receives as input the RDO files from simulation. First, the \\\texttt{TgcRdoToTgcDigitCfg} tool is used to extract data in \texttt{TgcDigit} format from the raw RDO data , which represents hit position information on the TGC detector. Then, the \texttt{m\_cabling} tool maps these \texttt{TgcDigits} into the Online ID format of the \textit{Identifier}, which is used to identify detector channels at the mechanical level. (The \textit{Identifier} currently supports four encoding schemes: Offline ID, Readout ID, Online ID, and Trigger ID. In this case, the Online ID format is used. For detailed explanations of the Identifier, refer to the Appendix.) A summary of the structure and meaning of the Online ID is provided in Table~\ref{tab:OnlineID}.
+The L0TGCSimulator receives as input the RDO files from simulation. First, the \\\texttt{TgcRdoToTgcDigitCfg} tool is used to extract data in \texttt{TgcDigit} format from the raw RDO data , which represents hit position information on the TGC detector. Then, the \texttt{m\_cabling} tool maps these \texttt{TgcDigits} into the Online ID format of the \textit{Identifier}, which is used to identify detector channels at the mechanical level (the \textit{Identifier} currently supports four encoding schemes: Offline ID, Readout ID, Online ID, and Trigger ID, here the Online ID format is used). A summary of the structure and meaning of the Online ID is provided in Table~\ref{tab:OnlineID}.
 \input{tables/OnlineID_meaning.tex}
 
 To interface this with the trigger logic, I developed a class named \textit{SetInput} as shown in Figure~\ref{fig:input_adaptation}. This class receives the decoded Online IDs and converts them into the boolean input vectors required for the Intra Station Coincidence stage. The mapping rule between the Online ID values and the corresponding bit vector dimensions is described in Table~\ref{tab:OnlineID_vs_vector}.
@@ -207,9 +207,9 @@ For \textit{SegRec}, one set of LUT are used for WireRec and StripRec respective
 The correspondence between LUT types and TGC sectors is summarized in Table~\ref{tab:LUT_with_sectors}.
 \input{tables/LUT_with_sectors.tex}
 
-Following a similar approach to the \textit{IntraCoin} extension, we defined one object per sector for \textit{WireRec}, \textit{StripRec} and \textit{WSCoin}, and each object is assigned the corresponding LUT according to its sector position. The output results confirm that the reconstruction is processing successfully across all 48 TGC sectors. Further evaluations are performed in Chapter~\ref{ch:PerformanceEvaluation}.
+Following a similar approach to the \textit{IntraCoin} extension, we defined one object per sector for \textit{WireRec}, \textit{StripRec} and \textit{WSCoin}, and each object is assigned the corresponding LUT according to its sector position. The output results confirm that the reconstruction is processing successfully across all 48 TGC sectors. Further evaluations are performed in Section~\ref{sec:L0MuonS1TGCPerformance}.
 %====================================================================================================
-\section{Memory Reduction of LUT} \label{MemoryReduction}
+\section{Memory Reduction of LUT} \label{sec:MemoryReduction}
 %====================================================================================================
 In the previous section, the bitwise simulator was successfully integrated into Athena and verified to run locally. However, to support future integration into the real Athena environment, it is essential to reduce the simulator's memory usage to meet the framework’s memory constraints, which is around 500 \text{MB} for the simulation of TGC detector. This section presents an attempt of memory reduction optimization by a Look-Up Table (LUT) storage simplification strategy.
 
@@ -239,4 +239,8 @@ The final data structures used are as follows: the sizes of "uint" variables are
   \item \texttt{std::unordered\_map<uint32\_t, uint8\_t>}  for WCorr LUTs.
 \end{itemize}
 
-As a result of these optimisations, the memory required for a single-sector bitwise simulator was reduced from 296 \text{MB} to 260 \text{MB}, a reduction of approximately 12\%. Additionally, during the integration, a one-time full loading strategy was adopted for all LUTs at initialization, in contrast to the original bitwise simulator which rewrote LUT content upon each use. Combined with the LUT sharing across sectors on the same side discussed earlier, this contributed further to the reduction of the total memory of the implemented L0TGCSimulator, from the originally estimated 14 \text{GB} down to approximately 6.3 \text{GB}.
+As a result of this optimization, combined with the simplification of input data chain discussed in Section~\ref{subsec:InputAdaptation} and the LUT sharing scheme, the total memory usage of implemented L0TGCSimulator was reduced from the originally estimated 14~GB down to approximately 6.3~GB, corresponding to a 55\% decrease.
+
+%====================================================================================================
+\section{Performance Evaluation} \label{sec:L0MuonS1TGCPerformance}
+%====================================================================================================

@@ -1,15 +1,13 @@
 %====================================================================================================
 \chapter{The Athena Framework} \label{ch:Athena}
 %====================================================================================================
-The ATLAS software framework supports data production and processing, Monte Carlo generation and simulation, and downstream analysis of the ATLAS detector data. The framework includes several projects, which can be partially-overlapped with other project aiming for different processing propose. Among them, the broadest selection form the basis of Athena~\cite{ATLAScomputing2025}, a generalpurpose offline software framework based on Gaudi architecture. This chapter briefly introduces the Gaudi architecture, followed by an overview of the Athena framework built on it. Besides, new development to multi-threaded Athena are also presented.
+The ATLAS software framework supports experimental data transformation, Monte Carlo generation and simulation, and downstream analysis of the ATLAS detector data. The framework includes several projects, the most comprehensive one among them forms the basis of Athena~\cite{ATLAScomputing2025}, a general-purpose offline software framework based on Gaudi architecture. This chapter briefly introduces the Gaudi architecture, followed by an overview of the Athena framework built on it. Besides, new development to multi-threaded Athena are also presented.
 %====================================================================================================
-\section{Gaudi} \label{sec:Gaudi}
+\section{The Gaudi Architecture} \label{sec:Gaudi}
 %====================================================================================================
-The Large Hadron Collider (LHC), located at CERN, generates petabytes of raw data each year. To extract meaningful physics insights, these data must be processed through multiple stages such as reconstruction, filtering, and offline analysis. Since the experiments are planned to continue for many years, it is crucial to anticipate evolving software requirements and advancements in the underlying technologies. Therefore, the software must be designed with enough flexibility and adaptability, allowing it to accommodate these changes and remain maintainable over extended periods of operation.
+The Large Hadron Collider (LHC) generates petabytes of raw data each year. To extract meaningful physics insights, these data must be processed through multiple stages such as reconstruction of kinematical variables by detector signals, filtering and selection of data of interests, and offline analysis for physics purposes. Since the experiments are planned to continue for many years, it is crucial to anticipate evolving software requirements and advancements in the underlying technologies. Therefore, the software must be designed with enough flexibility and adaptability, allowing it to accommodate these changes and remain maintainable over extended periods of operation.
 
-To address these challenges, a new object-oriented software framework for High Energy Physics, Gaudi, was developed. Originally designed for the LHCb experiment, Gaudi provides a modular and flexible environment for building various data-processing applications across various computing platforms. As the core of the framework, Gaudi relies on a well-defined architecture outlining the primary components and their interactions, thereby ensuring overall design integrity and promoting maximum reuse of core software components. 
-
-Figure~\ref{fig:Gaudi_object_diagram} shows the major components of the Gaudi software architecture. The architecture of the Gaudi framework is introduced as follow.
+To address that, a new object-oriented software framework for High Energy Physics, Gaudi, was developed \cite{Gaudi}. Originally designed for the LHCb experiment, Gaudi provides a modular and flexible environment for building various data-processing applications across various computing platforms. As the core of the framework, Gaudi is based on a well-defined architecture that specifies the main components and their interactions. Figure~\ref{fig:Gaudi_object_diagram} shows the major components of the Gaudi software architecture. The architecture of the Gaudi framework is introduced in the following.
 
 \begin{figure}[htbp]
   \centering
@@ -43,34 +41,33 @@ The Gaudi framework uses several \textit{transient data stores} to manage the ex
     \item \textbf{Transient Histogram Store} holds statistical data, and generally lasts across the processing of a complete job.
 \end{itemize}
 
-The propose of the Transient Store is to minimize the coupling between algorithms and data objects. Algorithms can store intermediate results into the transient store, and other algorithms can access this data later without needing to know how it was produced. In this way, different algorithms communicate indirectly via a shared data space, which enhances modularity and flexibility. Additionally, the Transient Store serves as an intermediate buffer between different data representations, playing a key role in the conversion from transient data to persistent or graphical formats.
+The propose of the Transient Store is to minimize the coupling between algorithms and data objects. Algorithms can store intermediate results into the transient store, and other algorithms can access this data later without needing to know how it was produced. In this way, different algorithms communicate indirectly via a shared data space. The Transient Store serves as an intermediate buffer between different data representations, responsible for conversion from transient data to persistent or graphical formats.
 %====================================================================================================
 \subsection{Services}
 %====================================================================================================
-Services in the Gaudi framework are a category of components that provide all the services and functionalities required by the algorithms, either directly or indirectly. This architectural approach releases many software routine tasks from the algorithm developer, enabling them to focus on physics data processing logic. These services are breifly introduced as below, some services could be seen in Figure~\ref{fig:Gaudi_object_diagram}.
+Services in the Gaudi framework are a category of components that provide all the services and functionalities required by the algorithms, either directly or indirectly. This architectural approach releases many software routine tasks from the algorithm developer, enabling them to focus on physics data processing logic. These services are breifly introduced as below, some of which could be seen in Figure~\ref{fig:Gaudi_object_diagram}.
 
-Some services is responsible for managing transient data stores, including the event data service and detector data service, etc. These services simplify data access and ensure efficient communication between different components of the framework. In addition, the different persistency services provide the functionalities in managing the transformation of data between transient and persistent representations. These transformations rely on specific \textit{converters}, which are capable of converting a given data object into its appropriate format. Gaudi also provides auxiliary services such as the job options service, the message service, particle properties service and other services such as visualisation and event seletors.
+Some services is responsible for managing transient data stores, including the event data service and detector data service, etc. These services simplify data access and ensure efficient communication between different components of the framework. In addition, the different persistency services provide the functionalities in managing the transformation of data between transient and persistent representations. These transformations rely on specific \textit{converters}, which are capable of converting a given data object into its appropriate format. Auxiliary services are also provided by Gaudi, such as the job options service, the message service, particle properties service and other services such as visualisation and event seletors.
 
 %====================================================================================================
 \section{Athena}
 %====================================================================================================
-Although Gaudi was, like we talked above, originally developed within the context of the LHCb experiment~\cite{LHCb_tech}, it was designed to be highly customizable and adaptable to various tasks, making it suitable for integration into the software environments of other experiments. The Gaudi framework is now shared by particle physics experiments including ATLAS, GLAST, HARP and OPERA. Here, a brief overview of ATLAS control framework based on Gaudi architecture, \textit{Athena}, is presented.
+Although Gaudi was originally developed within the context of the LHCb experiment~\cite{LHCb_tech}, it was designed to be highly customizable and adaptable to various tasks, making it suitable for integration into the software environments of other experiments. The Gaudi framework is now shared by particle physics experiments including ATLAS, GLAST, HARP and OPERA \cite{CHEP2004}. Here, a brief overview of ATLAS control framework based on Gaudi architecture, \textit{Athena}, is presented.
 
-Athena is the object oriented control framework used by the ATLAS experiment at CERN. It is developed in C++, and is designed with a modular component architecture, consisting of a series of packages covering all the main processes along the data flow. It is also supplemented by external libraries such as POOL, SEAL, PI and Geant.
-The framework is designed to maintain a strict separation between transient and persistent data, where components code to abstract interfaces. This allows individual components to be easily replaced or updated as technologies advance. It is essential for an experiment to operate over several decades.
-Athena comprises the ATLAS specific extensions to Gaudi, which includes:
+Athena is the object oriented control framework used by the ATLAS experiment at CERN. It is developed in C++, and is designed with a modular component architecture, consisting of a series of packages covering all the main processes along the data flow. It is also supplemented by external libraries such as POOL, a data storing service, and Geant, a software package for MC simulation.
+The framework enforces a clear separation between transient and oersistent data. Components access data through abstract interfaces rather than direct access to the implementation. This allows individual components to be easily replaced or updated as technologies advance. Athena comprises the ATLAS specific extensions to Gaudi, which includes:
 
 \begin{itemize}
-    \item \textbf{StoreGate} – A transient data store used for exchanging information between algorithms during processing~\cite{AthenaStoreGate}.
-    \item \textbf{Interval of Validity Service (IOVSvc)} – Handles time-dependent conditions and detector data.
-    \item \textbf{Pileup} – Supports the simulation of multiple interactions within a single bunch crossing to approach realistic experimental conditions.
-    \item \textbf{History Service} – Maintains a multi-level record of data provenance, enabling traceability and reproducibility of reconstructed data.
-    \item \textbf{Python Scripting} – Provides configuration and interactive control of Athena components based on Python.
+    \item \textbf{StoreGate} - a transient data store used for exchanging information between algorithms during processing~\cite{AthenaStoreGate}.
+    \item \textbf{Interval of Validity Service (IOVSvc)} - handles time-dependent conditions and detector data.
+    \item \textbf{Pileup} - supports the simulation of multiple interactions within a single bunch crossing to approach realistic experimental conditions.
+    \item \textbf{History Service} - maintains a multi-level record of data provenance, enabling traceability and reproducibility of reconstructed data.
+    \item \textbf{Python Scripting} - provides configuration and interactive control of Athena components based on Python.
 \end{itemize}
 
-In a data processing flow on Athena, dynamically loadable components are employed, leading to the concepts of Algorithms, Services, and Tools we simply introduced in Section~\ref{sec:Gaudi}. The processing flow is illustrated as Figure~\ref{fig:Athena_process}. 
+In a data processing flow on Athena, dynamically loadable components are employed, leading to the concepts of Algorithms, Services, and Tools introduced in Section~\ref{sec:Gaudi}. The processing flow is illustrated as Figure~\ref{fig:Athena_process}. 
 
-Algorithms operate on data resided in a shared event store, where they retrieve and store objects identified by type and a string key. In principle, each Algorithm is stateless with respect to event data and communicates with others solely through the event store—except in some specialized cases not yet adapted to multithreading. Services are shared resources accessed by multiple components, such as the event store itself, error logging, and random number generation. Tools act as auxiliary components and can be uniquely owned by Algorithms, Services, or even other Tools. Each of the three component types—Algorithms, Services, and Tools—supports the declaration of configurable properties, allowing consistent initialization as part of the job setup phase.
+Algorithms operate on data resided in a shared event store, where they retrieve and store objects identified by type and a string key. In principle, each Algorithm is stateless with respect to event data and communicates with others solely through the event store. Services are shared resources accessed by multiple components, such as the event store itself, error logging, and random number generation. Tools act as auxiliary components and can be uniquely owned by Algorithms, Services, or even other Tools. Each of the three component types—Algorithms, Services, and Tools—supports the declaration of configurable properties, allowing consistent initialization as part of the job setup phase.
 
 \begin{figure}[htbp]
   \centering
@@ -83,9 +80,7 @@ Algorithms operate on data resided in a shared event store, where they retrieve 
 %====================================================================================================
 \section{Multi-threaded Developments for Athena}
 %====================================================================================================
-The Athena framework was initially developed in the early 2000s, predating the stagnation of single-core CPU clock speeds. As such, it was fundamentally designed for serial event processing. Despite this limitation, Athena has efficiently processed billions of simulated and collider events, contributing to physics results such as the discovery of the Higgs boson and numerous other ATLAS observations during LHC Run~1 from 2009 to 2012.
-
-During LHC Run~2, 2015 to 2018, increasingly demanding computing conditions were addressed through the development of \textit{AthenaMP}~\cite{AthenaMP}, a multi-process version of Athena. AthenaMP operates by forking multiple worker processes from a primary process after the initialization phase. These workers run the event loop in parallel, allowing large static memory structures—such as detector geometry and magnetic field maps—to be shared via the Linux kernel’s copy-on-write mechanism.
+The Athena framework was initially developed in the early 2000s, predating the stagnation of single-core CPU clock speeds. As such, it was fundamentally designed for serial event processing. During LHC Run~2, 2015 to 2018, increasingly demanding computing conditions were addressed through the development of \textit{AthenaMP}~\cite{AthenaMP}, a multi-process version of Athena. AthenaMP operates by forking multiple worker processes from a primary process after the initialization phase. These workers run the event loop in parallel, allowing large static memory structures—such as detector geometry and magnetic field maps—to be shared via the Linux kernel’s copy-on-write mechanism.
 
 However, this approach also presents limitations. Minor changes in memory—such as modifying a single bit—can cause entire memory pages to become unshared, negating the benefits of memory sharing. Furthermore, the C++ memory model does not allow for fine control over which data are assigned to which physical pages. In addition, with the further evoluation of the LHC, event complexity and data acquisition rates are expected to increase significantly. These challenges motivated the development of \textit{AthenaMT}, a multi-threaded version of the Athena framework which first emerged in Athena release~22, in LHC Run~3 phase. In multi-process (MP) parallelism, worker processes are forked from a primary process a pre-configured stage in execution (e.g., before or after the first event is processed). After forking, workers share memory pages allocated in the primary process but otherwise execute independently in parallel. Each worker has its own private memory region and produces output separately, requiring a dedicated post-processing step for output merging. The event throughput and memory usage comparison between AthenaMP and AthenaMT are shown in Figure~\ref{fig:AthenaMT_throughput} and Figure~\ref{fig:AthenaMT_memory}, respectively.
 
@@ -107,3 +102,20 @@ However, this approach also presents limitations. Minor changes in memory—such
     \end{minipage}
 \end{figure}
 
+The multi-threaded framework adopted in Run~3 sets some new requirements for software development and code design \cite{ATLAScomputing2025}. In the Athena implementation that will be discussed in Chapter~\ref{ch:L0MuonS1TGC}, several adaptations were made compared to non-threaded code in order to ensure safe and consistent behavior under multi-threaded environment:
+
+\begin{enumerate}
+  \item \textbf{Event and conditions data are accessed via handles.} \\
+  All data access is performed through \textit{handles} , avoiding direct use of non-thread-safe caching or back-channel communication. For example, \texttt{SG::ReadHandleKey} and \texttt{SG::WriteHandleKey} are used for retrieving and writing data in StoreGate, preventing race conditions when data is accessed concurrently by diffenent threads.
+  
+  \item \textbf{Unique object for each process are applied.} \\
+  Each algorithm instance writes to a separate data object. In a multi-threaded environment, event data must only be modified by the processing thread. Therefore, this implementation uses unique objects for each process, avoiding appending to or modifying existing data objects.
+  
+  \item \textbf{Non-const structure are avoided.} \\
+  The const structures are considered unsafe in multi-threaded process, since it may cause data conflict if a non-const structure was shared in several threads. Shared non-const static data can introduce data conflicts and non-determinism across threads.
+  
+  \item \textbf{Thread-safe Services are used.} \\
+  All Services used in this implementation are explicitly thread-safe. Since Services are global components accessed by multiple algorithms, they are either stateless, properly synchronized (e.g., via status locking), or designed to operate with thread-local data.
+\end{enumerate}
+
+Through these measures, the implementation can be operated with thread safety on the Athena multi-threaded environment.
