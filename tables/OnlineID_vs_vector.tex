@@ -1,20 +1,20 @@
 \begin{table}[htbp]
   \centering
-  \caption{Mapping Rule between the input vector dimensions and OnlineID}
+  \caption{Mapping rule between the input vector indices and OnlineID}
   \label{tab:OnlineID_vs_vector}
   \begin{tabular}{|p{3cm}|p{4cm}|p{6cm}|}
     \hline
     \textbf{Indices of \newline Input Vector} & \textbf{OnlineID} & \textbf{Mapping Rule} \\
     \hline
-    side & subsystemNumber & 0 for Aside ($+1$), 1 for Cside ($-1$) \\
+    side & subsystemNumber & subsystemNumber = 1: \newline side = 0 (A-side) \newline subsystemNumber = -1: \newline side = 1 (C-side) \\
     \hline
-    sl & octantNumber,\newline moduleNumber & $sl = 3 \times$ octantNumber \newline $+ \lfloor$moduleNumber $/ 3\rfloor$ \\
+    sl & octantNumber, \newline moduleNumber & sl = 3 $\times$ octantNumber + \newline (moduleNumber \% 3) \\
     \hline
-    subsec & moduleNumber & subsec = moduleNumber mod 3 \\
+    subsec & moduleNumber & subsec = moduleNumber \% 3 \\
     \hline
-    layer & layerNumber, isStrip & If Wire: layer = layerNumber \newline If Strip: layer = layerNumber + 6 \\
+    layer & layerNumber, isStrip & Wire: layer = layerNumber \newline Strip: layer = layerNumber + 6 \newline (no layerNumber = 1 for Strip) \\
     \hline
-    channel & channelNumber & same \\
+    ch & channelNumber & Wire Endcap: \newline ch = channelNumber + $\text{offset}^{*}$ \newline Strip Endcap: \newline ch = channelNumber + $\text{offset}^{**}$ \newline Wire Forward: \newline ch = channelNumber \newline Strip Forward: \newline ch = channelNumber \\
     \hline
   \end{tabular}
 \end{table}
