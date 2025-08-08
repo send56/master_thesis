@@ -1,11 +1,11 @@
 %====================================================================================================
 \chapter{Implementation of a Simulator for L0 Endcap Muon Trigger System} \label{ch:L0MuonS1TGC}
 %====================================================================================================
-This chapter presents the implementation of the simulator for the TGC Sector Logic (hereafter referred to as L0TGCSimulator), which performs the fast reconstruction of muon tracks and their momenta in the endcap region of L0 muon trigger system. This L0TGCSimulator is for a precise simulation, based on an existing bit-level simulator called "bitwise simulator", which emulates the firmware of the TGC sector logic. The chapter begins with the description of the structure and logic of the original bitwise simulator, including its hit processing and reconstruction pipeline. It then brief summarize the local implementation of this simulator within the ATLAS software framework, Athena, followed by a memory optimization technique applied. Finally, the trigger efficiency performance of the implemented simulator is evaluated.
+This chapter presents the implementation of the simulator for the TGC Sector Logic (hereafter referred to as L0TGCSimulator), which performs the fast reconstruction of muon tracks and their momenta in the endcap region of L0 muon trigger system. This L0TGCSimulator is for a precise simulation, based on an existing bit-level simulator called ``bitwise simulator'', which emulates the firmware of the TGC sector logic. The chapter begins with the description of the structure and logic of the original bitwise simulator, including its hit processing and reconstruction pipeline. It then brief summarizes the local implementation of this simulator within the ATLAS software framework, Athena, followed by a memory optimization technique applied. Finally, the trigger efficiency performance of the implemented simulator is evaluated.
 %====================================================================================================
 \section{Bitwise Simulator} \label{sec:BitwiseSimulator}
 %====================================================================================================
-The bitwise simulator is a C++-based software tool developed for the Phase-II upgrade that emulates the TGC Sector Logic (SL) by replicating the bitwise operations performed by the hardware. It receives a hit map of wire segment and strip segment as an input, then reconstruct the muon tracks and calculate the position information ($\eta$, $\phi$) and the transverse momentum ($p_\mathrm{T}$). These trigger information is sent to the next trigger processing module. Figure~\ref{fig:blockDiagram} shows the block diagram of the trigger logic of the endcap SL firmware. The firmware consists of four Super Logic Regions (SLRs) on FPGAs. Among them, SLR0, SLR2, and SLR3 are for simulating muon candidates in the Endcap 1, Endcap 2, and Forward regions, respectively, as illustrated in Figure~\ref{fig:endcapAndForward}. SLR1 functions as a post-processing stage for the other three SLRs, forwarding the reconstructed results to the Inner Coincidence module in order to suppress muons that do not originate from the initial proton-proton collision point.
+The bitwise simulator is a C++-based software tool developed for the Phase-II upgrade that emulates the TGC Sector Logic (SL) by replicating the bitwise operations performed by the hardware. It receives a hit map of wire segment and strip segment as an input, then reconstructs the muon tracks and calculate the position information ($\eta$, $\phi$) and the transverse momentum ($p_\mathrm{T}$). These trigger information is sent to the next trigger processing module. Figure~\ref{fig:blockDiagram} shows the block diagram of the trigger logic of the endcap SL firmware. The firmware consists of four Super Logic Regions (SLRs) on FPGAs. Among them, SLR0, SLR2, and SLR3 are for simulating muon candidates in the Endcap 1, Endcap 2, and Forward regions, respectively, as illustrated in Figure~\ref{fig:endcapAndForward}. SLR1 functions as a post-processing stage for the other three SLRs, forwarding the reconstructed results to the Inner Coincidence module in order to suppress muons that do not originate from the initial proton-proton collision point.
 TrackSelector selects muon candidates with higher $p_\mathrm{T}$ and forwards them to the \MUCTPI for trigger processing.
 \begin{sidewaysfigure}
   \centering
@@ -17,7 +17,7 @@ TrackSelector selects muon candidates with higher $p_\mathrm{T}$ and forwards th
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/chapter5/endcap_and_forward_region.png}
-  \caption{Schematic view of Big Wheel (BW) TGC of an Endcap SL blade, which is segmented into the "Endcap 1", "Endcap 2", and Forward trigger sectors \cite{EndcapSLPDR}.}
+  \caption{Schematic view of Big Wheel (BW) TGC of an Endcap SL blade, which is segmented into the ``Endcap 1'', ``Endcap 2'', and Forward trigger sectors \cite{EndcapSLPDR}.}
   \label{fig:endcapAndForward}
 \end{figure}
 
@@ -57,7 +57,7 @@ The Segment Reconstruction step is executed independently for the wire and strip
 
 \subsubsection{Wire Segment Reconstruction}
 
-For the wire segment, the three stations, M1 (triplet), M2 (doublet), and M3 (doublet), have different number of gas layers. Therefore, the reconstruction logic must distinguish between triplet and doublet geometries. Moreover, not all possible combinations of Position IDs are included in the LUT, since some of the combinations would correspond to unrealistical large bending angles, which are unlikely to result from real muon trajectories. To constrain the valid combinations, the concept of \textit{Units} and \textit{Subunits} is introduced.
+For the wire segment, the three stations, M1 (triplet), M2 (doublet), and M3 (doublet), have different number of gas layers. Therefore, the reconstruction logic must distinguish between triplet and doublet geometries. Moreover, not all possible combinations of Position IDs are included in the LUT, since some of the combinations would correspond to unrealistically large bending angles, which are unlikely to result from real muon trajectories. To constrain the valid combinations, the concept of \textit{Units} and \textit{Subunits} is introduced.
 
 The different coincidence pattern are used for the wire segment reconstruction depending on the positions of the Intra Station Coincidence. They are subdivided into 90 parts called \textit{Units}. Each Unit covers:
 \begin{itemize}
@@ -71,7 +71,7 @@ These Units are designed to capture muon trajectories (both $\mu^+$ and $\mu^-$)
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/chapter5/wire_unit.png}
-  \caption{Schematic of the coverage of a "Unit" region in three stations of wire segment reconstruction \cite{EndcapSLPDR}.}
+  \caption{Schematic of the coverage of a ``Unit'' region in three stations of wire segment reconstruction \cite{EndcapSLPDR}.}
   \label{fig:wire_unit}
 \end{figure}
 
@@ -91,7 +91,7 @@ Each strip Unit is subdivided into two \textit{Subunits}. Figure~\ref{fig:strip_
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/chapter5/strip_unit.png}
-  \caption{Schematic of the coverage of a "Unit" region in three stations of strip segment reconstruction \cite{EndcapSLPDR}.}
+  \caption{Schematic of the coverage of a ``Unit'' region in three stations of strip segment reconstruction \cite{EndcapSLPDR}.}
   \label{fig:strip_unit}
 \end{figure}
 
@@ -128,18 +128,18 @@ Two types of \textit{regions} are defined here: the \textit{8 Unit Region} and t
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/chapter5/wsc_region.png}
-  \caption{Structure of 8 Unit Region (as "region8") and 32 Unit Region (as "region32") in Wire-Strip Coincidence \cite{yamashita}.}
+  \caption{Structure of 8 Unit Region (as ``region8'') and 32 Unit Region (as ``region32'') in Wire-Strip Coincidence \cite{yamashita}.}
   \label{fig:wsc_region}
 \end{figure}
 
 Within the Block Selector, wire and strip segments are reconstructed independently according to the following priority rules:
 \begin{enumerate}
   \item Select the candidate with the largest number of coincidence layers.
-  \item If multiple candidates have the same number of matched layers, choose the one with the smaller absolue value of \((\Delta\phi, \Delta\theta)\).
+  \item If multiple candidates have the same number of matched layers, choose the one with the smaller absolute value of \((\Delta\phi, \Delta\theta)\).
 \end{enumerate}
 
 \paragraph{In an 8 Unit Region:}  
-The region can contain up to 4 strip segments and 2 wire segments, yielding $4 \times 2 = 8$ possible block candidataes. Based on the priority logic, one strip segment and one wire segment are selected and combined to form a single output block candidate.
+The region can contain up to 4 strip segments and 2 wire segments, yielding $4 \times 2 = 8$ possible block candidates. Based on the priority logic, one strip segment and one wire segment are selected and combined to form a single output block candidate.
 
 \paragraph{In a 32 Unit Region:}  
 This region with larger $\eta$ may contain up to 4 strip segments and 8 wire segments, resulting in 32 possible block candidates. The Block Selector selects segments as below:
@@ -183,13 +183,13 @@ Figure~\ref{fig:input_adaptation} illustrates the forepart of data preparation a
 The L0TGCSimulator receives a RDO (Raw Data Object) file as input, which is a bit-packed format read out from the detector. First, the \\\texttt{TgcRdoToTgcDigitCfg} tool on Athena is used to generate the \texttt{TgcDigits}, which represents digitalized hits position information, from the RDO file. Then, a data format converter from \texttt{TGCcablingSvc} maps these \texttt{TgcDigits} into the \textit{OnlineID}, which describes the specific geometric position on the TGC detector. A summary of the structure and meaning of the OnlineID is provided in Table~\ref{tab:OnlineID}.
 \input{tables/OnlineID_meaning.tex}
 
-To interface this with the trigger logic, a class named \textit{SetInput} is developed for this study, as shown in Figure~\ref{fig:input_adaptation}. This class receives the decoded OnlineIDs and converts them into the boolean input vectors required for the Intra Station Coincidence stage. The mapping rules between the OnlineID values and the corresponding indices of the input vector are described in Table~\ref{tab:OnlineID_vs_vector}. Currently, the $\text{offset}^{*}$ for wire in the table means the differential of channels caused by the overlaps between adjacent chambers in wire endcap, which comes from the different definitions of chaneel numbers between input vector indices and OnlineID; the $\text{offset}^{**}$ for strip indicates the channel numbers of the chamber correspinding to the rNumber of OnlineID, because the definitions of channel numbers is the ``local id'' within a chamber in the OnlineID, and the ``global id'' across all chambers in the vector.
+To interface this with the trigger logic, a class named \textit{SetInput} is developed for this study, as shown in Figure~\ref{fig:input_adaptation}. This class receives the decoded OnlineIDs and converts them into the boolean input vectors required for the Intra Station Coincidence stage. The mapping rules between the OnlineID values and the corresponding indices of the input vector are described in Table~\ref{tab:OnlineID_vs_vector}. Currently, the $\text{offset}^{*}$ for wire in the table means the differential of channels caused by the overlaps between adjacent chambers in wire endcap, which comes from the different definitions of channel numbers between input vector indices and OnlineID; the $\text{offset}^{**}$ for strip indicates the channel numbers of the chamber corresponding to the rNumber of OnlineID, because the definitions of channel numbers is the ``local id'' within a chamber in the OnlineID, and the ``global id'' across all chambers in the vector.
 \input{tables/OnlineID_vs_vector.tex}
 
 %====================================================================================================
 \subsection{Extension to All TGC Sectors} \label{subsec:Extension}
 %====================================================================================================
-Since the bitwise simulator was originally designed to simulate only 1/48 of the TGC Big Wheel (hereafter referred to as “one TGC sector”), in order to cover the complete endcap trigger logic and simulate muons across the entire endcap region, it is necessary to extend the bitwise simulator to all 48 TGC sectors of the BW (24 sectors on each of the A and C sides).
+Since the bitwise simulator was originally designed to simulate only 1/48 of the TGC Big Wheel (hereafter referred to as ``one TGC sector''), in order to cover the complete endcap trigger logic and simulate muons across the entire endcap region, it is necessary to extend the bitwise simulator to all 48 TGC sectors of the BW (24 sectors on each of the A and C sides).
 
 In the previous section, we described the adaptation of the \texttt{TgcDigit} input into the format used by the bitwise simulator for the Intra-Station Coincidence logic. Since the Intra-Station Coincidence operates independently in each sector and follows the identical coincidence logic, this part is directly extended and implemented by independently processing each TGC sector in parallel. In the following, we describe the extension of the subsequent processes: Wire/Strip Segment Reconstruction and Wire-Strip Coincidence (for convenience, we refer to these modules as IntraCoin, SegRec (WireRec and StripRec), and WSCoin hereafter, respectively.)
 
@@ -216,7 +216,7 @@ In the previous section, the bitwise simulator was successfully integrated into 
 
 A previous simple calculation in Chapter~\ref{ch:introduction} shows that, if directly scaled the bitwise simulator to cover all 48 TGC sectors, the total memory usage would reach about 14~GB, which significantly exceeds the permissible limit. Through the optimisation strategies described in this section, the extended L0TGCSimulator reduces total memory usage to approximately 6.3~GB.
 
-After an analysis on the structure of the bitwise simulator, since the LUTs are refered in both the reconstruction processes, the \textit{StripRec} and \textit{WSCoin}, they consume about 20\% to 30\% of the whole memory of bitwise simulator. These LUTs used in Segment Reconstruction and Wire-Strip Coincidence are responsible for reconstructing $\Delta\theta$, $\Delta\phi$, and $p_{\mathrm{T}}$. In the bitwise simulator, they are stored by high-dimensional vectors of \textit{map} variable to be searched, emulating the data storing mode by URAM in the firmware. Each vector dimension corresponds to the pivot hit position information, which are used to determine which LUT to be refered. This position information indicates the corresponding \textit{subunit} position of hit on M3 station in SegRec, and the $\eta$ value of the M3 hit in WSCoin. 
+After an analysis on the structure of the bitwise simulator, since the LUTs are referred in both the reconstruction processes, the \textit{StripRec} and \textit{WSCoin}, they consume about 20\% to 30\% of the whole memory of bitwise simulator. These LUTs used in Segment Reconstruction and Wire-Strip Coincidence are responsible for reconstructing $\Delta\theta$, $\Delta\phi$, and $p_{\mathrm{T}}$. In the bitwise simulator, they are stored by high-dimensional vectors of \textit{map} variable to be searched, emulating the data storing mode by URAM in the firmware. Each vector dimension corresponds to the pivot hit position information, which are used to determine which LUT to be referred to. This position information indicates the corresponding \textit{subunit} position of hit on M3 station in SegRec, and the $\eta$ value of the M3 hit in WSCoin. 
 
 In the bitwise simulator before implementation, any index as dimension only uses lower than 6 bits in value, however stored within a 32 bit integer, resulting in vast amounts of unused address space. This inefficiency is visualised on the left side of Fig.~\ref{fig:LUT_optimization}, which abstracts the LUT container into a three-dimensional cube.
 \begin{figure}[htbp]
@@ -227,12 +227,12 @@ In the bitwise simulator before implementation, any index as dimension only uses
 \end{figure}
 
 To address this, a new scheme was applied that flattens the multi-dimensional container into a one-dimensional map by packing the individual coordinate indices into a single integer key as \texttt{uint}. Each field uses only as many bits as required by its range, and the final key is constructed through bit-shifting. The result is a more compact and efficient memory structure, as shown in the right part of Fig.~\ref{fig:LUT_optimization}. An illustrative overview of the new LUT structure is shown in Table~\ref{tab:LUT_store_structure}. All four LUT types, SegRecWire, SegRecStrip, WSPattern, and Wire Segment Corrector, were migrated to this representation.
-\input{tables/LUT_store_strutcure.tex}
+\input{tables/LUT_store_structure.tex}
 
 To further optimize both memory and access time, the standard \texttt{std::map} container was replaced by \texttt{std::unordered\_map}. A \texttt{std::map} in C++ is an associative container that stores key-value pairs in a sorted order according to the key. Internally, it uses a self-balancing binary search tree (BST), like a Red-Black tree. This guarantees logarithmic time complexity $\mathcal{O}(\log n)$ for insertion, deletion, and search operations. On the other hand, \texttt{std::unordered\_map} is implemented using a \textit{hash table}. This allows average constant-time complexity $\mathcal{O}(1)$ for insertion, deletion, and lookup, although the element order is not maintained. Because it avoids tree-based structures, it also consumes less memory on average. In the present case, since the keys used to represent hit patterns stored in the LUT are typically sparse and discontinuous, using an unordered\_map is suited to this purpose and does not cause problems. The main differences between map and unordered\_map are listed in Table~\ref{tab:map_vs_unorderedmap}.
 \input{tables/map_vs_unorderedmap.tex}
 
-The final data structures used are as follows: the sizes of "uint" variables are adjusted by the numbers of necessary bits of address and position information.
+The final data structures used are as follows: the sizes of ``uint'' variables are adjusted by the numbers of necessary bits of address and position information.
 \begin{itemize}
   \item \texttt{std::unordered\_map<uint32\_t, uint32\_t>} for WireRec LUTs;
   \item \texttt{std::unordered\_map<uint32\_t, uint32\_t>} for StripRec LUTs;
@@ -245,59 +245,68 @@ As a result of this optimization, combined with the simplification of input data
 %====================================================================================================
 \section{Performance of the L0TGCSimulator} \label{sec:L0MuonS1TGCPerformance}
 %====================================================================================================
-In this section, we will give the efficiency of the L0TGCSimulator, compared with the efficiency performed in previous studies related to the bitwise simulator. The simulation for the L0TGCSimulator uses Monte Carlo sample of single muon events at a center-of-mass energy of $13.6\,\mathrm{TeV}$, from $2 < p_\mathrm{T} < 50~\text{GeV}$, with a total of $10{,}000$ events.
+In this section, we will give the efficiency of the L0TGCSimulator, compared with the efficiency performed in previous studies related to the bitwise simulator. The simulation for the L0TGCSimulator uses Monte Carlo sample of single muon events at a center-of-mass energy of $13.6\,\mathrm{TeV}$, from $2 < p_\mathrm{T} < 50~\text{GeV}$, with a total of $5{,}000$ events.
 
-Figure~\ref{fig:yama_wire} and Figure~\ref{fig:yama_strip} gives the efficiencies on $\eta$ in wire and strip segment for the stand-alone bitwise simulator as references, respectively \cite{yamashita}. Figure~\ref{fig:eff_wire_eta} and Figure~\ref{fig:eff_strip_eta} shows the efficiencies on $\eta$ in wire and strip segment for the L0TGCSimulator, respectively. The efficiencies are defined in Equation~\ref{eq:simulator_efficiency}. 
+Figure~\ref{fig:yama_wire} and Figure~\ref{fig:eff_wire_eta} give the efficiencies on $\eta$ in wire segment of stand-alone bitwise simulator~\cite{yamashita} and the L0TGCSimulator, respectively. Figure~\ref{fig:yama_strip} and Figure~\ref{fig:eff_strip_eta} show the efficiencies on $\eta$ in strip segment of stand-alone bitwise simulator~\cite{yamashita} and the L0TGCSimulator, respectively. The efficiencies are defined in Equation~\ref{eq:simulator_efficiency}. 
 
 \begin{equation}
 \label{eq:simulator_efficiency}
 \mathrm{Efficiency} = \frac{\text{Muons reconstructed successfully by the wire/strip segment}}{\text{All the truth muons in endcaps}}
 \end{equation}
 
-% stand-alone bitwise
+% wire comparison
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter5/yamashita_wire_eff.png}
-  \caption{Efficiency on $\eta$ in wire segment of the stand-alone bitwise simulator. The horizontal axis is $\eta$ \cite{yamashita}.}
-  \label{fig:yama_wire}
+  \begin{minipage}{0.485\textwidth}
+    \centering
+    \vspace{2mm}
+    \includegraphics[width=\linewidth]{figs/chapter5/yamashita_wire_eff.png}
+    \caption{Efficiency on $\eta$ in wire segment of the stand-alone bitwise simulator. The horizontal axis is $\eta$ \cite{yamashita}.}
+    \label{fig:yama_wire}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.505\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/chapter5/eff_wire_eta.png}
+    \caption{Efficiency on $\eta$ in wire segment of the L0TGCSimulator.}
+    \label{fig:eff_wire_eta}
+  \end{minipage}
 \end{figure}
 
+% strip comparison
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figs/chapter5/yamashita_strip_eff.png}
-  \caption{Efficiency on $\eta$ in strip segment of the stand-alone bitwise simulator. The horizontal axis is $\eta$ \cite{yamashita}.}
-  \label{fig:yama_strip}
+  \begin{minipage}{0.485\textwidth}
+    \centering
+    \vspace{2mm}
+    \includegraphics[width=\linewidth]{figs/chapter5/yamashita_strip_eff.png}
+    \caption{Efficiency on $\eta$ in strip segment of the stand-alone bitwise simulator. The horizontal axis is $\eta$ \cite{yamashita}.}
+    \label{fig:yama_strip}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.505\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/chapter5/eff_strip_eta.png}
+    \caption{Efficiency on $\eta$ in strip segment of the L0TGCSimulator.}
+    \label{fig:eff_strip_eta}
+  \end{minipage}
 \end{figure}
 
-% L0S1TGCSimulator
+Figure~\ref{fig:eff_wire_pt} and Figure~\ref{fig:eff_strip_pt} gives the efficiencies on $p_\mathrm{T}$ in wire and strip segment of the L0TGCSimulator, respectively. 
+
+% pt
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1.0\textwidth]{figs/chapter5/eff_wire_eta.pdf}
-  \caption{Efficiency on $\eta$ in wire segment of the L0TGCSimulator.}
-  \label{fig:eff_wire_eta}
+  \begin{minipage}{0.50\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/chapter5/eff_wire_pt.png}
+    \caption{Efficiency on $p_\mathrm{T}$ in wire segment of the L0TGCSimulator.}
+    \label{fig:eff_wire_pt}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.50\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/chapter5/eff_strip_pt.png}
+    \caption{Efficiency on $p_\mathrm{T}$ in strip segment of the L0TGCSimulator.}
+    \label{fig:eff_strip_pt}
+  \end{minipage}
 \end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1.0\textwidth]{figs/chapter5/eff_strip_eta.pdf}
-  \caption{Efficiency on $\eta$ in strip segment of the L0TGCSimulator.}
-  \label{fig:eff_strip_eta}
-\end{figure}
-
-Figure~\ref{fig:eff_wire_pt} and Figure~\ref{fig:eff_strip_pt} gives the effciencis on $p_\mathrm{T}$ in wire and strip segment for the L0TGCSimulator, respectively. 
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1.0\textwidth]{figs/chapter5/eff_wire_pt.pdf}
-  \caption{Efficiency on $p_\mathrm{T}$ in wire segment of the L0TGCSimulator.}
-  \label{fig:eff_wire_pt}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1.0\textwidth]{figs/chapter5/eff_strip_pt.pdf}
-  \caption{Efficiency on $p_\mathrm{T}$ in strip segment of the L0TGCSimulator.}
-  \label{fig:eff_strip_pt}
-\end{figure}
-
-The L0TGCSimulator reproduced the efficiency in wire segment, with efficiencies higher than 95\% over the $1.05 < |\eta| < 2.41$ and $p_\mathrm{T}$ over the given range of $2 < p_\mathrm{T} < 50~\text{GeV}$. In the strip segment, however, efficiency are not as good as the reference, with efficiencies at about 85\% on average. This inefficiency in strip segment may due to a mismatch in the mapping scheme between the OnlineID and the input vector indices, as introduced in Section~\ref{subsec:InputAdaptation}. The reason is under investigation.
+The L0TGCSimulator reproduced the efficiency in wire segment, with efficiencies higher than 95\% over the $1.05 < |\eta| < 2.41$ and $p_\mathrm{T}$ over the given range of $2 < p_\mathrm{T} < 50~\text{GeV}$. In the strip segment, however, the efficiency is not as good as the reference, with efficiencies at about 85\% on average. This inefficiency in strip segment may due to a mismatch in the mapping scheme between the OnlineID and the input vector indices, as introduced in Section~\ref{subsec:InputAdaptation}. The reason is under investigation.
