@@ -7,12 +7,12 @@ The ATLAS experiment at the LHC uses a multipurpose particle detector with a for
 %====================================================================================================
 To describe positions and directions of particles within the ATLAS detector, a right-handed coordinate system is adopted with the origin located at the interaction point (IP). In this system, the \(z\)-axis is along the beam pipe, the \(x\)-axis points from the IP to the center of the LHC ring, and the \(y\)-axis points upwards.
 
-Cylindrical coordinates \((\theta, \phi, z)\) are also commonly used. Here, \(\theta\) denotes the polar angle from the \(z\)-axis and spans from \(0\) to \(\pi\), while \(\phi\) is the azimuthal angle measured around the beam axis, ranging from \(-\pi\) to \(\pi\) from the \(x\)-axis. The distance from the \(z\)-axis is denoted by \(r\) (sometimes referred as \(R\)). A schematic of the coordinate system is shown in Figure~\ref{fig:ATLASCoordinate}.
+Cylindrical coordinates \((\theta, \phi, z)\) are also commonly used. Here, \(\theta\) denotes the polar angle from the \(z\)-axis and spans from \(0\) to \(\pi\), while \(\phi\) is the azimuthal angle measured around the beam axis, ranging from \(-\pi\) to \(\pi\), measured from the \(x\)-axis. The distance from the \(z\)-axis is denoted by \(R\). A schematic of the coordinate system is shown in Figure~\ref{fig:ATLASCoordinate}.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=1.0\textwidth]{figs/chapter2/ATLAS_coordinate.png}
-  \caption{The coordinate system used in the ATLAS experiment \cite{mino}.}
+  \includegraphics[width=1.0\textwidth]{figs/chapter2/ATLAS_coordinate_new.png}
+  \caption{The coordinate system used in the ATLAS experiment.}
   \label{fig:ATLASCoordinate}
 \end{figure}
 
@@ -34,7 +34,7 @@ In most collider events, the final-state particles are highly relativistic, with
 
 This \(\eta\) is widely used in physics analyses as it preserves the boost-invariant properties of rapidity \(y\) in the massless limit, which is more appropriate since the masses of particles are not accessible in high-energy collider detectors.
 
-In ATLAS experiment, the region of $1.05 < |\eta| < 2.41$ is called \textit{endcap}, which consists of ``A-side'' and ``C-side'' corresponding respectively to the positive and negative directions of the \(z\)-axis. The region between two endcaps, defined by $|\eta| < 1.05$, is called \textit{barrel}.
+In the ATLAS experiment, the detector is divided into a cylindrical \textit{barrel} and two \textit{endcaps}. The endcap region, corresponding to $1.05 < |\eta| < 2.41$, consists of the ``A-side'' and ``C-side'', which point along the positive and negative \(z\)-axis, respectively. The barrel region, corresponding to $|\eta| < 1.05$, lies between the two endcaps.
 
 In addition, transverse energy is defined as 
 \[
@@ -54,7 +54,7 @@ The angular distance \(\Delta R\) between two particles is a commonly used quant
 %====================================================================================================
 \section{Magnet System} \label{sec:MagnetSystem}
 %====================================================================================================
-The ATLAS detector employs a unique hybrid magnetic system composed of four large superconducting magnets, spanning 24~m in diameter and 45~m in length \cite{ATLASDetector2008}. This system includes a central solenoid and three toroidal systems (a barrel toroid and two endcap toroids), enabling high magnetic field coverage across both inner and muon detection systems.
+The ATLAS detector employs a unique hybrid magnetic system composed of four large superconducting magnets, spanning 24~m in diameter and 45~m in length \cite{ATLASDetector2008}. This system includes a central solenoid and three toroidal systems (a barrel toroid and two endcap toroids), enabling high magnetic field coverage across both inner-tracking and muon detection systems.
 
 The solenoid magnet, placed along the beam axis, provides a 2~T axial magnetic field for the Inner Detector (ID) inside the electromagnetic calorimeter. Surrounding the calorimeter system are the toroidal magnets: the barrel toroid, composed of eight superconducting coils, and two endcap toroids, which together generate a toroidal magnetic field of about 0.5~T to 1~T for the muon spectrometer in the central and forward regions. The schematic geometry of the magnet windings is illustrated in Figure~\ref{fig:magnet_windings}. The solenoid is located inside the calorimeter volume, while the barrel and endcap toroids are interleaved around it. 
 
@@ -72,7 +72,7 @@ The ATLAS muon spectrometer is the outermost subsystem of the detector, designed
 
 The magnetic field in the spectrometer is shaped by a central barrel toroid and two endcap toroids. For muons with pseudorapidity $|\eta| < 1.4$, the bending power is provided mainly by the barrel toroid. In the forward regions ($1.6 < |\eta| < 2.7$), deflection comes from the endcap toroids. The intermediate transition region ($1.4 < |\eta| < 1.6$) receives contributions from both barrel and endcap fields. This field configuration creates a predominantly orthogonal bending force relative to the muon trajectory. 
 
-Figure~\ref{fig:muon_system} demonstrates the layout of the ATLAS muon system. For precise track coordinate measurements, Monitored Drift Tubes ({\MDT}s) are used over most of the acceptance. The trigger system covers the pseudorapidity range $|\eta| < 2.4$. In the barrel region, Resistive Plate Chambers ({\RPC}s) are used, while Thin Gap Chambers ({TGC}s) are used in the endcap. The chambers of RPCs and TGCs perform three main functions: identifying the bunch crossing, providing well-defined $p_\mathrm{T}$ thresholds as trigger decisions, and determining the muon coordinate. Muon detectors located at the inner endcap region, the New Small Wheels ({\NSW}s), are also integrated into the muon trigger system, working in conjunction with other detectors such as the TGCs to enhance the precision of muon momentum reconstruction.
+Figure~\ref{fig:muon_system} demonstrates the layout of the ATLAS muon system. For precise track coordinate measurements, Monitored Drift Tubes ({MDT}s) are used over most of the acceptance. The trigger system covers the pseudorapidity range $|\eta| < 2.4$. In the barrel region, Resistive Plate Chambers ({RPC}s) are used, while Thin Gap Chambers ({TGC}s) are used in the endcap. The chambers of RPCs and TGCs perform three main functions: identifying the bunch crossing, providing well-defined $p_\mathrm{T}$ thresholds as trigger decisions, and determining the muon coordinate. Muon detectors located at the inner endcap region, the New Small Wheels ({NSW}s), are also integrated into the muon trigger system, working in conjunction with other detectors such as the TGCs to reduce the background in endcap region.
 
 \begin{figure}[htbp]
   \centering
@@ -135,10 +135,19 @@ The Monitored Drift Tubes (MDTs) are precision tracking detectors covering the r
   \label{fig:MDT_tube}
 \end{figure}
 
+During Phase-II upgrade, a new type of chamber, sMDT (Small-diameter MDT), with only half the tube diameter of the original MDT chambers, will be used to cope with the higher background rates at the HL-LHC. The sMDT design makes it possible to accommodate additional chambers in the limited available space. Figure~\ref{fig:sMDT} shows the comparison between MDT and sMDT tubes.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/chapter2/sMDT_MDT.png}
+  \caption{Pictures of MDT (left) and sMDT (right) tubes.}
+  \label{fig:sMDT}
+\end{figure}
+
 %====================================================================================================
 \subsection{Thin Gap Chamber (TGC)} \label{sec:TGC}
 %====================================================================================================
-The Thin Gap Chambers (TGCs) are used in the endcap region of the ATLAS muon spectrometer as trigger detectors, covering the pseudorapidity range $1.05 < |\eta| < 2.4$. They are positioned on both sides of the toroidal magnetic field, with the inner detectors located in the Endcap Inner (EI) region and the outer detectors forming the Big Wheel (\BW). The picture of TGC BW are given as Figure\ref{fig:TGC_pic}. The BW TGCs consist of three stations, designated as M1, M2, and M3 from the inner to outer layers.
+The Thin Gap Chambers (TGCs) are used in the endcap region of the ATLAS muon spectrometer as trigger detectors, covering the pseudorapidity range $1.05 < |\eta| < 2.4$. They are positioned on both sides of the toroidal magnetic field, with the inner detectors located in the Endcap Inner (EI) region and the outer detectors forming the Big Wheel (BW). The picture of TGC BW are given as Figure\ref{fig:TGC_pic}. The BW TGCs consist of three stations, designated as M1, M2, and M3 from the inner to outer layers.
 
 \begin{figure}[htbp]
   \centering
@@ -156,15 +165,16 @@ TGCs are multi-wire proportional chambers (MWPCs), as illustrated in Figure~\ref
   \label{fig:TGC_cross_section}
 \end{figure}
 
-For higher space resolution during reconstruction, stations are composed of multiple layers. The M1 station contains three layers of wires and two layers of strips (\textit{triplet}), while M2 and M3 consist of two layers each for both wires and strips (\textit{doublet}). The wire and strip signals are read out by grouping them. These readout channels of wires and strips from these doublet or triplet layers are all ``staggered'' intentionally with adjacent layers, generating the conception of \textit{staggered ID}. Each staggered ID corresponds to a unique channel combination that spans across offset wire or strip layers, and enables finer position resolution. In M1 with three wire layers staggered by 1/3 each, the staggered ID achieves roughly 1/3 of the layer's intrinsic spatial resolution. In M2 and M3, the two-layer structure results in a resolution gain of roughly 1/2 per ID unit. The staggered IDs are systematically defined and registered in databases, allowing consistent identification across layers during pattern recognition and offline reconstruction. An example of the channel-staggered IDs correspondence table in the endcap wire segment are given as Figure~\ref{fig:staggeredID}.
+For higher space resolution during reconstruction, stations are composed of multiple layers. The M1 station contains three layers of wires and two layers of strips (\textit{triplet}), while M2 and M3 consist of two layers each for both wires and strips (\textit{doublet}). The wire and strip signals are read out by grouping them. These readout channels of wires and strips from these doublet or triplet layers are all ``staggered'' intentionally with adjacent layers, generating the conception of \textit{staggered ID}. Each staggered ID corresponds to a unique channel combination that spans across offset wire or strip layers, and enables finer position resolution. In M1 with three wire layers staggered by 1/3 each, the staggered ID achieves roughly 1/3 of the layer's intrinsic spatial resolution. In M2 and M3, the two-layer structure results in a resolution gain of roughly 1/2 per ID unit. The staggered IDs are systematically defined and registered in databases, allowing consistent identification across layers during pattern recognition and offline reconstruction. 
 
+\begin{comment}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.95\textwidth]{figs/chapter2/staggeredID_small.png}
   \caption{A part of correspondence table of endcap wire segment between channel number and staggered ID.}
   \label{fig:staggeredID}
 \end{figure}
-
+\end{comment}
 %====================================================================================================
 \subsection{New Small Wheel (NSW)}
 %====================================================================================================
@@ -213,9 +223,9 @@ Once the events are accepted at L1 trigger, they are then sent to a software-bas
 %====================================================================================================
 \subsection{Data Acquisition System}
 %====================================================================================================
-The Data Acquisition (DAQ) system is responsible for the transport and assembly of data cooperating with the two-level trigger system. It begins at the detector-specific front-end and off-detector electronics, which perform series of data processing and monitoring features before passing the trigger and other downstream systems. In Runs~1 and 2 of LHC, off-detector processing was carried out by custom hardware modules known as Read-Out Drivers (RODs), which, upon receiving a Level-1 accept signal, forwarded data to the common stage Read-Out System (ROS). The ROS, composed of commodity servers equipped with custom-built I/O cards, temporarily stores subdetector data in internal memory buffers, named Read-Out Buffers (ROBs). Data flow from the ROS to the High-Level Trigger (HLT) is orchestrated by the Data Collection Manager (DCM), which handles on-demand data requests from HLT processing nodes (HLTMPPUs). These nodes perform event reconstruction and selection, determining whether events are saved for permanent storage or discarded, and then send this decision to HLT. 
+The Data Acquisition (DAQ) system is responsible for the transport and assembly of data cooperating with the two-level trigger system. It begins at the detector-specific front-end and off-detector electronics, which perform series of data processing and monitoring features before passing the trigger and other downstream systems. In Run~1 and Run~2 of the LHC, data from the Front-End Electronics (FE) were accepted according to the Level-1 accept (L1A) signal and then transmitted to the Read-Out Drivers (RODs), which subsequently forwarded the accepted data to the common stage Read-Out System (ROS). The ROS, composed of commodity servers equipped with custom-built I/O cards, temporarily stores subdetector data in internal memory buffers, named Read-Out Buffers (ROBs). Data flow from the ROS to the High-Level Trigger (HLT) is orchestrated by the Data Collection Manager (DCM), which handles on-demand data requests from HLT processing nodes (HLTMPPUs). These nodes perform event reconstruction and selection, determining whether events are saved for permanent storage or discarded, and then send this decision to HLT. 
 
-The upgrades for DAQ system in Run~3 are achieved by new modules of the Front-End Link eXchange (FELIX) read-out system and software, running on commodity servers (SW ROD), which are integrated into the read-out path for detector systems with upgraded electronics. L1 Calo, L1 Muon and the Central Trigger all send data to the Read-Out System (or FELIX/Software ROD). Both ROS and SW ROD interfaces present a unified interface to the HLT, enabling data routing in both scenarios. Once the HLT processing has been completed, passed events are forwarded to a dedicated cluster of servers (known as Sub-Farm Outputs (SFOs)) for processes like packing, compression, and transfer to offline storage. The bandwidth to permanent storage in Run~3 are allowed for up to 8 GB/s.
+The upgrades for DAQ system in Run~3 are achieved by new modules of the Front-End Link eXchange (FELIX) read-out system and software, running on commodity servers (SW ROD), which are integrated into the read-out path for detector systems with upgraded electronics. L1 Calo, L1 Muon and the Central Trigger all send accepted data to the Read-Out System (or FELIX/Software ROD). Both ROS and SW ROD interfaces present a unified interface to the HLT, enabling data routing in both scenarios. Once the HLT processing has been completed, passed events are forwarded to a dedicated cluster of servers (known as Sub-Farm Outputs (SFOs)) for processes like packing, compression, and transfer to offline storage. The bandwidth to permanent storage in Run~3 are allowed for up to 8 GB/s \cite{ATLASRun3Trigger}.
 
 %====================================================================================================
 \section{Upgrade for TDAQ System} \label{sec:TDAQUpgrade}
@@ -238,7 +248,7 @@ The Event Filter (EF) system is based on the Processor Farm \cite{TDAQ_TDR_EF}, 
 %====================================================================================================
 \section{Upgrade for Muon Trigger System} \label{sec:MuonTriggerUpgrade}
 %====================================================================================================
-The upgraded Level-0 Muon Trigger System for the HL-LHC is expected to deal with higher trigger rates and improve muon trigger efficiency. The upgrade strategy is illustrated as a block diagram in Figure~\ref{fig:muon_trigger_upgrade}. It consists of several main components: the Barrel Sector Logic, Endcap Sector Logic, the NSW Trigger Processor, and the MDT Trigger Processor. Both the Sector Logic and the NSW Trigger Processor components installed during LS2 will be replaced with new hardware to accommodate the higher performance requirements. The MDT Trigger Processor will be added newly. The Barrel Sector Logic receives hit information from the RPC and energy flags from the Tile Calorimeter. The Endcap Sector Logic, covering the region $1.05 < |\eta| < 1.3$, receives hits from TGC and RPC. At $1.3 < |\eta| < 2.4$, muon trigger rates are reduced by TGC and NSW, retaining the efficiency for the muons with the transverse momentum $p_\mathrm{T}$ higher than the threshold. The NSW Trigger Processor will be deployed as a separate component from Sector Logic due to large amount of resources consumed by track-segment reconstruction of NSW hits. After initial candidate track reconstruction, the Sector Logic sends these candidates to the MDT Trigger Processor, which offers higher spatial resolution than TGC and RPC, for a refined $p_\mathrm{T}$ estimation. The filtered candidates are then passed back to the Sector Logic, and the final muon trigger decisions are forwarded to Level-0 MUCTPI.
+The upgraded Level-0 Muon Trigger System for the HL-LHC is expected to deal with higher trigger rates and improve muon trigger efficiency. The upgrade strategy is illustrated as a block diagram in Figure~\ref{fig:muon_trigger_upgrade}. It consists of several main components: the Barrel Sector Logic, Endcap Sector Logic, the NSW Trigger Processor, and the MDT Trigger Processor. Both the Sector Logic and the NSW Trigger Processor components installed during LS2 will be replaced with new hardware to accommodate the higher performance requirements. The Barrel Sector Logic receives hit information from the RPC and energy flags from the Tile Calorimeter. The Endcap Sector Logic, covering the region $1.05 < |\eta| < 1.3$, receives hits from TGC and RPC. At $1.3 < |\eta| < 2.4$, muon trigger rates are reduced by TGC and NSW, retaining the efficiency for the muons with the transverse momentum $p_\mathrm{T}$ higher than the threshold. The NSW Trigger Processor will be deployed as a separate component from Sector Logic due to large amount of resources consumed by track-segment reconstruction of NSW hits. After initial candidate track reconstruction, the Sector Logic sends these candidates to the newly added MDT Trigger Processor, which offers higher spatial resolution than TGC and RPC, for a refined $p_\mathrm{T}$ estimation. The filtered candidates are then passed back to the Sector Logic, and the final muon trigger decisions are forwarded to Level-0 MUCTPI.
 
 \begin{figure}[htbp]
   \centering

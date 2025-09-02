@@ -5,7 +5,7 @@ This chapter introduces the development of a simple emulator, emulating the L0 m
 %====================================================================================================
 \section{Purpose and Function of the Simple Emulator} \label{sec:L0MuonPurpose}
 %====================================================================================================
-Figure~\ref{fig:L0_trigger_chain} shows the prospective trigger chain for Phase-II L0 muon trigger simulation on Athena. The \textit{Level-0 TGC Sector Logic} package, on which this research is focusing, provides muon $p_\mathrm{T}$ and ROI (Region Of Interest) information to the downstream package, \textit{Level-0 MDT Trigger-Processor}, for further calculation. The purpose of the L0MuonEmulator in this chapter, is to provide a temporary input interface for the next simulation of \textit{Level-0 MDT Trigger-Processor}, as a preliminary implementation of the \textit{Level-0 TGC Sector Logic} simulator. At present, the emulator takes the truth values of the four-momentum for all generated particles in a simulated event as an input. 
+The purpose of the L0MuonEmulator is to provide a temporary input interface for downstream development, the Event Filter (EF), which we introduced in Chapter~\ref{ch:ATLAS}. This emulator provides $p_\mathrm{T}$ and the ROI (Region Of Interest) information of muons for further selection by EF. At present, the emulator takes the truth values of the four-momentum for all generated particles in a simulated event as an input. 
 
 In practice, only final state muons and its anti-particles are used. These selected muons and anti-particles are then passed through a smearing and filtering procedure that models the detector resolution and trigger efficiency, providing a collection of RoI information based on the emulated L0 muon trigger. Each RoI contains information on transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), azimuthal angle ($\phi$), and charge.
 
@@ -13,8 +13,7 @@ The filtering function in the L0MuonEmulator simulates the trigger efficiency as
 
 The smearing algorithm emulates the detector resolution by applying a smearing function to the inverse transverse momentum ($q/p_\mathrm{T}$) of the selected muons. Currently, a Gaussian distribution is used as the smearing function, tentatively with a width of 5\% of the input $q/p_\mathrm{T}$. The $\eta$ and $\phi$ positions are not smeared at this stage, as the RoI granularity is coarser than the smearing scale, which thereby dominates the uncertainty. Once smeared, the kinematic variables are encoded into a bit-wise RoI word format compatible with the hardware-level representation used in the ATLAS trigger system.
 
-In addition, the L0MuonEmulator provides a monitoring infrastructure based on the Athena Monitoring Framework. A series of histograms are produced during the execution to validate the emulator output against the input truth muon properties. These include distributions of $\eta$, $\phi$, $p_\mathrm{T}$, and $q/p_\mathrm{T}$ before and after smearing, as well as resolution plots such as $\Delta\eta$, $\Delta\phi$, and relative $p_\mathrm{T}$ deviation. These features support the evaluation of trigger-level muon reconstruction quality. Table~\ref{tab:L0MuonPlots} shows some of output histograms and their corresponding physical meaning.
-\input{tables/L0MuonEmulator_parameters.tex}
+In addition, the L0MuonEmulator provides a monitoring function based on the Athena Monitoring Framework. A series of histograms are produced during the execution to validate the emulator output with the input truth muon properties. These include distributions of $\eta$, $\phi$, $p_\mathrm{T}$, and $q/p_\mathrm{T}$ before and after smearing, as well as resolution plots such as $\Delta\eta$, $\Delta\phi$, and relative $p_\mathrm{T}$ deviation.
 
 %====================================================================================================
 \section{Muon Trigger Acceptance after Phase-II Upgrade} \label{sec:MuonTriggerAcceptance}
@@ -27,23 +26,30 @@ The performance of muon trigger acceptance in the barrel region for ``3/3 chambe
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.75\textwidth]{figs/chapter4/trigger_acceptance_map_3_3.png}
-  \caption{Trigger acceptance map in $\eta$-$\phi$ space using the 3/3 chambers coincidence logic \cite{TDAQ_TDR}. Significant coverage holes are visible in the BM station due to toroid coil supports.}
-  \label{fig:trigger_acceptance_3_3}
-\end{figure}
+  \begin{subfigure}{0.70\textwidth}
+    \includegraphics[width=\textwidth]{figs/chapter4/trigger_acceptance_map_3_3.png}
+    \caption{3/3 chambers}
+    \label{fig:trigger_acceptance_3_3}
+  \end{subfigure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figs/chapter4/trigger_acceptance_map_3_4.png}
-  \caption{Trigger acceptance map with 3/4 chambers coincidence scheme \cite{TDAQ_TDR}. The additional RPC0 layer in the BI station significantly improves acceptance in the central barrel region.}
-  \label{fig:trigger_acceptance_3_4}
-\end{figure}
+  % \vspace{0.1cm} % 图之间的竖直间距
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figs/chapter4/trigger_acceptance_map_3_4_BI_BO.png}
-  \caption{Trigger acceptance using 3/4 chambers + BI-BO logic \cite{TDAQ_TDR}. BI-BO mode offers further coverage in outer barrel regions.}
-  \label{fig:trigger_acceptance_3_4_BI_BO}
+  \begin{subfigure}{0.70\textwidth}
+    \includegraphics[width=\textwidth]{figs/chapter4/trigger_acceptance_map_3_4.png}
+    \caption{3/4 chambers}
+    \label{fig:trigger_acceptance_3_4}
+  \end{subfigure}
+
+  % \vspace{0.1cm}
+
+  \begin{subfigure}{0.70\textwidth}
+    \includegraphics[width=\textwidth]{figs/chapter4/trigger_acceptance_map_3_4_BI_BO.png}
+    \caption{3/4 chambers + BI-BO}
+    \label{fig:trigger_acceptance_3_4_BI_BO}
+  \end{subfigure}
+
+  \caption{Trigger acceptance maps in $\eta$-$\phi$ space for different coincidence logics \cite{TDAQ_TDR}.}
+  \label{fig:trigger_acceptance_all}
 \end{figure}
 %====================================================================================================
 \section{Simulation for the trigger acceptance} 
@@ -71,34 +77,33 @@ Figure~\ref{fig:L1MuonEndcapEff} shows the muon trigger efficiencies in the endc
 \mathrm{Efficiency} = \frac{\text{Muons selected by the filtering function}}{\text{All the truth muons}}
 \end{equation}
 
-As a result, the efficiency at the plateau are reproduced by the L0MuonEmulator, showing a fair agreement with the references.
+As a result, the turn-on curves are reproduced by the L0MuonEmulator, showing a fair agreement with the references.
 
+% --------- 第一页 两张图 ---------
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.75\textwidth]{figs/chapter4/L1Muon_endcap_eff.png}
+  \hspace{-1cm}\includegraphics[width=0.90\textwidth]{figs/chapter4/L1Muon_endcap_eff.png}
   \caption{Efficiency of L1 muon triggers in the endcap region for several $p_\mathrm{T}$ thresholds \cite{ATLASRun3Trigger}.}
   \label{fig:L1MuonEndcapEff}
-\end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figs/chapter4/L0Muon_barrel_eff.png}
+  % \vspace{0.2cm} % 图之间的竖直间距
+
+  \includegraphics[width=0.88\textwidth]{figs/chapter4/L0Muon_barrel_eff.png}
   \caption{Efficiency of RPC L0 muon triggers in the barrel region for different $p_\mathrm{T}$ thresholds using ``3/4 chambers + BI-BO'' scheme \cite{TDAQ_TDR}.}
   \label{fig:L0MuonBarrelEff}
 \end{figure}
 
-
+% --------- 第二页 两张图 ---------
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{figs/chapter4/efficiency_vs_pt_endcap_multi.pdf}
-  \caption{Efficiency of L0MuonEmulator in the endcap region for five $p_\mathrm{T}$ thresholds: 3~GeV, 5~GeV, 10~GeV, 15~GeV, 20~GeV.}
+  \includegraphics[width=0.85\textwidth]{figs/chapter4/efficiency_endcap_multi_right_new.png}
+  \caption{Efficiency of L0MuonEmulator in the endcap region for five $p_\mathrm{T}$ thresholds: 3~GeV, 5~GeV, 10~GeV, 20~GeV, 30~GeV.}
   \label{fig:eff_pt_endcap}
-\end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\textwidth]{figs/chapter4/efficiency_vs_pt_barrel_multi.pdf}
-  \caption{Efficiency of L0MuonEmulator in the barrel region for five $p_\mathrm{T}$ thresholds: 3~GeV, 5~GeV, 10~GeV, 15~GeV, 20~GeV.}
+  % \vspace{0.2cm}
+
+  \includegraphics[width=0.85\textwidth]{figs/chapter4/efficiency_barrel_multi_right_new.png}
+  \caption{Efficiency of L0MuonEmulator in the barrel region for five $p_\mathrm{T}$ thresholds: 3~GeV, 5~GeV, 10~GeV, 20~GeV, 30~GeV.}
   \label{fig:eff_pt_barrel}
 \end{figure}
 
@@ -109,9 +114,9 @@ Figure~\ref{fig:eta_phi_comparison} gives the two-dimensional $(\eta, \phi)$ acc
   \includegraphics[width=0.8\textwidth]{figs/chapter4/Trigger_acceptance_map_3_4_BI_BO.pdf}
   \vspace{0.5em}
   
-  \includegraphics[width=0.95\textwidth]{figs/chapter4/efficiency_eta_phi_2D.pdf}
+  \includegraphics[width=0.83\textwidth]{figs/chapter4/efficiency_eta_phi_2D_new.png}
   
-  \caption{Comparison of trigger acceptance maps in the $(\eta, \phi)$ plane of barrel region. Top: Reference acceptance from Phase-II studies. Bottom: Emulator efficiency map with manually masked regions.}
+  \caption{Comparison of trigger acceptance maps in the $(\eta, \phi)$ plane of barrel region. Top: Reference acceptance from Phase-II studies. Bottom: Emulator efficiency map including manually masked regions with $p_\mathrm{T}$ threshold of 3~GeV.}
   \label{fig:eta_phi_comparison}
 \end{figure}
 
