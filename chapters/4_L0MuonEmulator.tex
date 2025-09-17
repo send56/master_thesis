@@ -1,11 +1,11 @@
 %====================================================================================================
 \chapter{Development of a Simple Emulator for L0 Muon Trigger System} \label{ch:L0MuonEmulator}
 %====================================================================================================
-This chapter introduces the development of a simple emulator, emulating the L0 muon trigger behavior on both barrel and endcap region, called L0MuonEmulator. The L0Muon-Emulator is a C++ based software package on Athena that emulates the trigger decision for muons as provided by the L0 trigger system for HL-LHC. The L0MuonEmulator makes decisions of whether a muon candidate should be accepted or rejected based on a pre-set step function of transverse momentum $p_\mathrm{T}$, and then smears the $p_\mathrm{T}$, as an emulation of detector response due to finite momentum resolution of the detectors. In this chapter, an overview of the emulator's design and logic is provided. Since the simulation based solely on smearing was insufficient to replicate the actual trigger logic, a masking procedure to make the trigger performance is also introduced to reproduce the angular acceptance of the L0 muon trigger system. The result of the emulation is presented along with a discussion about the need for a more precise simulation approach.
+This chapter introduces the development of a simple emulator, emulating the L0 muon trigger behavior on both barrel and endcap region, called L0MuonEmulator. The L0Muon-Emulator is a C++ based software package on Athena that emulates the trigger decision for muons as provided by the L0 trigger system for HL-LHC. The L0MuonEmulator makes decisions of whether a muon candidate should be accepted or rejected based on a pre-set step function of transverse momentum $p_\mathrm{T}$, and then outputs smeared $p_\mathrm{T}$ as the transverse momentum information in ROI (Region Of Interest). In this chapter, an overview of the emulator's design and logic is provided. Since the simulation based solely on smearing was insufficient to replicate the actual trigger logic, a masking procedure to make the trigger performance is also introduced to reproduce the angular acceptance of the L0 muon trigger system. The result of the emulation is presented along with a discussion about the need for a more precise simulation approach.
 %====================================================================================================
 \section{Purpose and Function of the Simple Emulator} \label{sec:L0MuonPurpose}
 %====================================================================================================
-The purpose of the L0MuonEmulator is to provide a temporary input interface for downstream development, the Event Filter (EF), which we introduced in Chapter~\ref{ch:ATLAS}. This emulator provides $p_\mathrm{T}$ and the ROI (Region Of Interest) information of muons for further selection by EF. At present, the emulator takes the truth values of the four-momentum for all generated particles in a simulated event as an input. 
+The purpose of the L0MuonEmulator is to provide a temporary input interface for downstream development, the Event Filter (EF), which we introduced in Chapter~\ref{ch:ATLAS}. This emulator provides $p_\mathrm{T}$ and the ROI information of muons for further selection by EF. At present, the emulator takes the truth values of the four-momentum for all generated particles in a simulated event as an input. 
 
 In practice, only final state muons and its anti-particles are used. These selected muons and anti-particles are then passed through a smearing and filtering procedure that models the detector resolution and trigger efficiency, providing a collection of RoI information based on the emulated L0 muon trigger. Each RoI contains information on transverse momentum ($p_\mathrm{T}$), pseudorapidity ($\eta$), azimuthal angle ($\phi$), and charge.
 
@@ -26,7 +26,7 @@ The performance of muon trigger acceptance in the barrel region for ``3/3 chambe
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}{0.70\textwidth}
+  \begin{subfigure}{0.67\textwidth}
     \includegraphics[width=\textwidth]{figs/chapter4/trigger_acceptance_map_3_3.png}
     \caption{3/3 chambers}
     \label{fig:trigger_acceptance_3_3}
@@ -34,7 +34,7 @@ The performance of muon trigger acceptance in the barrel region for ``3/3 chambe
 
   % \vspace{0.1cm} % 图之间的竖直间距
 
-  \begin{subfigure}{0.70\textwidth}
+  \begin{subfigure}{0.67\textwidth}
     \includegraphics[width=\textwidth]{figs/chapter4/trigger_acceptance_map_3_4.png}
     \caption{3/4 chambers}
     \label{fig:trigger_acceptance_3_4}
@@ -42,7 +42,7 @@ The performance of muon trigger acceptance in the barrel region for ``3/3 chambe
 
   % \vspace{0.1cm}
 
-  \begin{subfigure}{0.70\textwidth}
+  \begin{subfigure}{0.67\textwidth}
     \includegraphics[width=\textwidth]{figs/chapter4/trigger_acceptance_map_3_4_BI_BO.png}
     \caption{3/4 chambers + BI-BO}
     \label{fig:trigger_acceptance_3_4_BI_BO}
@@ -96,13 +96,13 @@ As a result, the turn-on curves are reproduced by the L0MuonEmulator, showing a 
 % --------- 第二页 两张图 ---------
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{figs/chapter4/efficiency_endcap_multi_right_new.png}
+  \includegraphics[width=0.83\textwidth]{figs/chapter4/efficiency_endcap_multi_right_new_new.png}
   \caption{Efficiency of L0MuonEmulator in the endcap region for five $p_\mathrm{T}$ thresholds: 3~GeV, 5~GeV, 10~GeV, 20~GeV, 30~GeV.}
   \label{fig:eff_pt_endcap}
 
   % \vspace{0.2cm}
 
-  \includegraphics[width=0.85\textwidth]{figs/chapter4/efficiency_barrel_multi_right_new.png}
+  \includegraphics[width=0.83\textwidth]{figs/chapter4/efficiency_barrel_multi_right_new_new.png}
   \caption{Efficiency of L0MuonEmulator in the barrel region for five $p_\mathrm{T}$ thresholds: 3~GeV, 5~GeV, 10~GeV, 20~GeV, 30~GeV.}
   \label{fig:eff_pt_barrel}
 \end{figure}
