@@ -1,4 +1,6 @@
 *.pdf
+!master_thesis_submitted.pdf
+!master_thesis_submitted_final.pdf
 *.aux
 *.log
 *.synctex.gz
